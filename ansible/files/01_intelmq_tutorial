@@ -1,0 +1,3 @@
+user	ALL = NOPASSWD:ALL
+intelmq	ALL = NOPASSWD:ALL
+www-data	ALL = (intelmq) NOPASSWD:/usr/bin/intelmqctl /usr/local/bin/intelmqctl

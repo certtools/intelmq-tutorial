@@ -1,0 +1,105 @@
+---
+- hosts: malaga
+  tasks:
+   # GENERIC
+   - name: create intelmq unix user
+     user:
+       name: intelmq
+       comment: IntelMQ user
+       home: /opt/intelmq
+       shell: /usr/bin/bash
+   - name: Setup sudoers
+     copy:
+       src: files/01_intelmq_tutorial
+       dest: /etc/sudoers.d/01_intelmq_tutorial
+       owner: root
+       group: root
+       mode: 0440
+       validate: /usr/sbin/visudo -cf %s
+   - name: install packages
+     package:
+       name:
+         - git
+         - redis
+         - python3-pip
+         - python3-requests
+         - python3-redis
+         - python3-dnspython
+         - python3-psutil
+         - python3-dateutil
+         - python3-termstyle
+         - python3-tz
+         - python3-yaml
+         - python3-cerberus
+         - python3-geoip2
+         - python3-psycopg2
+         - postgresql
+         - python-pkg-resources
+   # INTELMQ CORE
+   - name: Create directories
+     file:
+       path: "{{ item }}"
+       state: directory
+       mode: 0755
+       owner: intelmq
+       group: intelmq
+     with_items:
+       - /opt/intelmq/
+       - /opt/intelmq/var/lib/bots/asn_lookup/
+       - /opt/intelmq/var/lib/bots/file-output/
+       - /opt/intelmq/var/lib/bots/maxmind_geoip/
+       - /opt/intelmq/var/log/
+       - /opt/intelmq/etc/manager/
+       - /opt/dev_intelmq
+   - name: clone git repository
+     git:
+       repo: https://github.com/certtools/intelmq.git
+       dest: /opt/dev_intelmq
+       version: master
+     become_user: intelmq
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
+   - name: install intelmq from local repository
+     pip:
+       name: /opt/dev_intelmq/
+       editable: yes
+       executable: pip3
+     become: True
+   - name: Setup intelmq files
+     copy:
+       src: /opt/dev_intelmq/intelmq/etc/
+       dest: /opt/intelmq/
+       remote_src: yes
+   #cp -R /opt/dev_intelmq/intelmq/bots/BOTS /opt/intelmq/etc/
+   # INTELMQ-MANAGER
+   #git clone https://github.com/certtools/intelmq-manager.git /tmp/intelmq-manager
+   #cp -R /tmp/intelmq-manager/intelmq-manager/* /var/www/html/manager/
+   #chown -R www-data.www-data /var/www/html/
+   #usermod -a -G intelmq www-data
+   #touch /opt/intelmq/etc/manager/positions.conf
+   - name: Set file permissions on configuration
+     file:
+       path: /opt/intelmq/etc/
+       recurse: yes
+       owner: intelmq
+       group: www-data
+       mode: u+rw,g+rw
+   # WEBINPUT
+   - name: install intelmq-webinput-csv from pip
+     pip:
+       name: /opt/dev_intelmq/
+       editable: yes
+       executable: pip3
+     become: True
+   - name: Write Webinput Apache configuration
+     copy:
+       src: 002_intelmq_webinput_csv.conf
+       dest: /etc/apache2/sites-enabled/
+   #The backend needs to write /var/lib/intelmq/webinput_csv.csv and /var/lib/intelmq/webinput_csv.temp to save it's state. Both files need to be writeable by the used process.
+   # POSTGRESQL
+   
+   - name: Create PostgreSQL HBA configuration
+     copy:
+       src: pg_hba.conf
+       dest: /etc/postgresql/11/main/pg_hba.conf
