@@ -6,6 +6,7 @@
      user:
        name: intelmq
        comment: IntelMQ user
+       group: intelmq
        home: /opt/intelmq
        shell: /usr/bin/bash
    - name: Setup sudoers
@@ -35,6 +36,9 @@
          - python3-psycopg2
          - postgresql
          - python-pkg-resources
+         - libapache2-mod-php7.3
+         - libapache2-mod-wsgi-py3
+         - python3-bs4
    # INTELMQ CORE
    - name: Create directories
      file:
@@ -51,7 +55,7 @@
        - /opt/intelmq/var/log/
        - /opt/intelmq/etc/manager/
        - /opt/dev_intelmq
-   - name: clone git repository
+   - name: clone IntelMQ git repository
      git:
        repo: https://github.com/certtools/intelmq.git
        dest: /opt/dev_intelmq
@@ -68,16 +72,40 @@
      become: True
    - name: Setup intelmq files
      copy:
-       src: /opt/dev_intelmq/intelmq/etc/
-       dest: /opt/intelmq/
+       src: "{{ item }}"
+       dest: /opt/intelmq/etc/
        remote_src: yes
-   #cp -R /opt/dev_intelmq/intelmq/bots/BOTS /opt/intelmq/etc/
+     with_items:
+       - /opt/dev_intelmq/intelmq/etc/
+       - /opt/dev_intelmq/intelmq/bots/BOTS
    # INTELMQ-MANAGER
-   #git clone https://github.com/certtools/intelmq-manager.git /tmp/intelmq-manager
-   #cp -R /tmp/intelmq-manager/intelmq-manager/* /var/www/html/manager/
-   #chown -R www-data.www-data /var/www/html/
-   #usermod -a -G intelmq www-data
-   #touch /opt/intelmq/etc/manager/positions.conf
+   - name: clone IntelMQ Manager git repository
+     git:
+       repo: https://github.com/certtools/intelmq-manager.git
+       dest: /home/user/intelmq-manager/
+       version: master
+     become_user: user
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
+   - name: Link IntelMQ Manager in webroot
+     file:
+       src: /home/user/intelmq-manager/intelmq-manager
+       dest: /var/www/html/manager
+       state: link
+       remote_src: yes
+   - name: provide default positions configuration and state file
+     copy:
+       src: "{{ item }}"
+       dest: /opt/intelmq/etc/manager/positions.conf
+     with_items:
+       - positions.conf
+       - state.json
+   - name: Add www-data to the intelmq group
+     user:
+       name: www-data
+       groups: intelmq
+       append: yes
    - name: Set file permissions on configuration
      file:
        path: /opt/intelmq/etc/
@@ -88,8 +116,7 @@
    # WEBINPUT
    - name: install intelmq-webinput-csv from pip
      pip:
-       name: /opt/dev_intelmq/
-       editable: yes
+       name: intelmq_webinput_csv
        executable: pip3
      become: True
    - name: Write Webinput Apache configuration
