@@ -40,6 +40,8 @@
          - python3-cerberus
          - python3-geoip2
          - python3-psycopg2
+         # for the postgresql_* ansible modules
+         - python-psycopg2
          - postgresql
          - python-pkg-resources
          - libapache2-mod-php7.3
@@ -143,3 +145,34 @@
      copy:
        src: pg_hba.conf
        dest: /etc/postgresql/11/main/pg_hba.conf
+   - name: Restart Apache
+     systemd:
+       name: postgresql
+       state: restarted
+   - name: Create PostgreSQL User
+     postgresql_user:
+       name: intelmq
+       password: intelmq
+       role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE
+     become_user: postgres
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
+   - name: Create PostgreSQL Database
+     postgresql_db:
+       name: intelmq
+       owner: intelmq
+     become_user: postgres
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
+   - name: Transfer SQL file
+     copy:
+       src: initdb.sql
+       dest: /tmp
+   - name: Create events table
+     postgresql_query:
+       db: intelmq
+       path_to_script: /tmp/initdb.sql
+       login_user: intelmq
+       login_password: intelmq
