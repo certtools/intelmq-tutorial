@@ -1,0 +1,131 @@
+{
+    "results": [
+        {
+            "function": "v100_dev7_modify_syntax",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.129027"
+        },
+        {
+            "function": "v110_shadowserver_feednames",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.130118"
+        },
+        {
+            "function": "v110_deprecations",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.130571"
+        },
+        {
+            "function": "v111_defaults_process_manager",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.131433"
+        },
+        {
+            "function": "v112_feodo_tracker_ips",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.132263"
+        },
+        {
+            "function": "v112_feodo_tracker_domains",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.132702"
+        },
+        {
+            "function": "v200_defaults_statistics",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.133654"
+        },
+        {
+            "function": "v200_defaults_broker",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.134092"
+        },
+        {
+            "function": "v200_defaults_ssl_ca_certificate",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.134520"
+        },
+        {
+            "function": "v202_fixes",
+            "retval": true,
+            "success": true,
+            "time": "2020-01-16T17:22:49.135117"
+        },
+        {
+            "function": "v210_deprecations",
+            "retval": null,
+            "success": true,
+            "time": "2020-01-16T17:22:49.135455"
+        }
+    ],
+    "upgrades": {
+        "v100_dev7_modify_syntax": true,
+        "v110_deprecations": true,
+        "v110_shadowserver_feednames": true,
+        "v111_defaults_process_manager": true,
+        "v112_feodo_tracker_domains": true,
+        "v112_feodo_tracker_ips": true,
+        "v200_defaults_broker": true,
+        "v200_defaults_ssl_ca_certificate": true,
+        "v200_defaults_statistics": true,
+        "v202_fixes": true,
+        "v210_deprecations": true
+    },
+    "version_history": [
+        [
+            1,
+            0,
+            0,
+            "dev7"
+        ],
+        [
+            1,
+            1,
+            0
+        ],
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            2
+        ],
+        [
+            2,
+            0,
+            0
+        ],
+        [
+            2,
+            0,
+            1
+        ],
+        [
+            2,
+            0,
+            2
+        ],
+        [
+            2,
+            1,
+            0
+        ],
+        [
+            2,
+            1,
+            1
+        ]
+    ]
+}
