@@ -25,6 +25,7 @@
      package:
        name:
          - vim
+         - screen
          - git
          - redis
          - python3-pip
@@ -122,14 +123,21 @@
    # WEBINPUT
    - name: install intelmq-webinput-csv from pip
      pip:
-       name: intelmq_webinput_csv
+       name: intelmq_webinput_csv >= 0.2.0
        executable: pip3
      become: True
    - name: Write Webinput Apache configuration
      copy:
        src: 002_intelmq_webinput_csv.conf
-       dest: /etc/apache2/sites-enabled/
-   #The backend needs to write /var/lib/intelmq/webinput_csv.csv and /var/lib/intelmq/webinput_csv.temp to save it's state. Both files need to be writeable by the used process.
+       dest: /etc/apache2/sites-available/000-default.conf
+   - name: Provide Webinput configuration
+     copy:
+       src: webinput_csv.conf
+       dest: /opt/intelmq/etc/webinput_csv.conf
+   - name: Restart Apache
+     systemd:
+       name: apache2
+       state: restarted
    # POSTGRESQL
    - name: Create PostgreSQL HBA configuration
      copy:
