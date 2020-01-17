@@ -17,9 +17,14 @@
        group: root
        mode: 0440
        validate: /usr/sbin/visudo -cf %s
+   - name: provide MOTD
+     copy:
+       src: motd
+       dest: /etc/
    - name: install packages
      package:
        name:
+         - vim
          - git
          - redis
          - python3-pip
@@ -94,13 +99,14 @@
        dest: /var/www/html/manager
        state: link
        remote_src: yes
-   - name: provide default positions configuration and state file
+   - name: provide default positions configuration
      copy:
-       src: "{{ item }}"
+       src: positions.conf
        dest: /opt/intelmq/etc/manager/positions.conf
-     with_items:
-       - positions.conf
-       - state.json
+   - name: provide default state file
+     copy:
+       src: state.json
+       dest: /opt/intelmq/var/lib/state.json
    - name: Add www-data to the intelmq group
      user:
        name: www-data
@@ -125,7 +131,6 @@
        dest: /etc/apache2/sites-enabled/
    #The backend needs to write /var/lib/intelmq/webinput_csv.csv and /var/lib/intelmq/webinput_csv.temp to save it's state. Both files need to be writeable by the used process.
    # POSTGRESQL
-   
    - name: Create PostgreSQL HBA configuration
      copy:
        src: pg_hba.conf
