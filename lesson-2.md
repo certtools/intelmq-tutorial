@@ -27,6 +27,9 @@ the documenation [here] and the Developers Guide here](https://github.com/certto
 ### Answer
 
 
+
+
+
 ## Simple input and output bots
 
 ... blabla talk about collectors and parsers
@@ -48,5 +51,44 @@ Filter on the country code NL
 
 
 ## Configure a feed: 
+
+
+<XXX insert description by sebix XXX>
+
+<comment: use a feed here which does not have country code info so that we can add it in the next task>
+
+### Task : XXX
+
+### Answer
+
+
+## Experts: adding information to the stream
+
+<pre supply geoip DB>
+
+### Task: add geoip info to the previous feed
+
+
+### Answer
+
+
+## Experts: add IP 2 ASN enrichment
+
+### Task
+
+### Answer
+
+
+## The IntelMQ manager
+
+Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
+
+### Task: configure a new feed (filecollector) and start und stop it
+
+### Answer
+
+
+
+# Recap
 
 
