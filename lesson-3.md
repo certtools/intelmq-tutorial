@@ -48,6 +48,29 @@ Observe that the data is in Postgresql
 ### Answer
 
 
+## Looking up contact data from a local database
+
+`/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite` contains a table `ti` with two columns:
+`cc` with two-letter country-codes and `email` with a comma-separated list of email addresses
+The data is from TI and contains all national CERTs listed there.
+
+### Task:
+Configure a bot so that all data (with country information) gets the national's CERT addresses as `source.abuse_contact`.
+
+### Answer:
+
+The bot is the "Generic DB Lookup" Expert.
+* `database`: `/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite`
+* `engine`: `sqlite`
+* `host`: not relevant
+* `match_fields`: `{"source.geolocation.cc": "cc"}`
+* `overwrite`: `true`
+* `password`: not relevant
+* `port`: not relevant
+* `replace_fields`: `{"email": "source.abuse_contact"}`
+* `sslmode`: not relevant
+* `table`: `ti`
+* `user`: not relevant
 
 ## Interfacing with a ticket system
 
