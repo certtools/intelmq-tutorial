@@ -187,3 +187,17 @@
        path_to_script: /tmp/initdb.sql
        login_user: intelmq
        login_password: intelmq
+   # SQLITE
+   - name: Move TI to SQLite converter
+     copy:
+       src: ti-to-sqlite-cc.py
+       dest: /usr/local/bin/
+       mode: '0755'
+   - name: Move TI JSON database
+     copy:
+       src: ti-teams.json
+       dest: /opt/intelmq/var/lib/bots/sql/
+   - name: Execute TI to SQLite converter
+     command: /usr/local/bin/ti-to-sqlite-cc.py --ti /opt/intelmq/var/lib/bots/sql/ti-teams.json /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
+     args:
+       creates: /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
