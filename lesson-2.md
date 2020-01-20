@@ -64,20 +64,26 @@ Filter on the country code NL
 
 ## Experts: adding information to the stream
 
-<pre supply geoip DB>
+The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
 
 ### Task: add geoip info to the previous feed
 
 
 ### Answer
 
+The bot is the "MaxMind GeoIP Expert". Parameters:
+* `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
 ## Experts: add IP 2 ASN enrichment
+
+The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data downloaded and converted by pyasn's utilities.
 
 ### Task
 
 ### Answer
 
+The bot is the "ASN Lookup" expert. Parameters:
+* `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
 
 ## The IntelMQ manager
 
