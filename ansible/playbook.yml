@@ -28,6 +28,7 @@
          - screen
          - git
          - redis
+         - jq
          - python3-pip
          - python3-requests
          - python3-redis
@@ -85,6 +86,14 @@
      with_items:
        - /opt/dev_intelmq/intelmq/etc/
        - /opt/dev_intelmq/intelmq/bots/BOTS
+   - name: Setup intelmq bash completion
+     copy:
+       src: "/opt/dev_intelmq/contrib/bash-completion/{{ item }}"
+       dest: /usr/share/bash-completion/completions/
+       remote_src: yes
+     with_items:
+       - intelmqctl
+       - intelmqdump
    # INTELMQ-MANAGER
    - name: clone IntelMQ Manager git repository
      git:
