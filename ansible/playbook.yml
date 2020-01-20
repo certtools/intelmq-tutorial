@@ -180,11 +180,11 @@
    - name: Transfer SQL file
      copy:
        src: initdb.sql
-       dest: /tmp
+       dest: /opt/intelmq/var/lib/bots/sql/
    - name: Create events table
      postgresql_query:
        db: intelmq
-       path_to_script: /tmp/initdb.sql
+       path_to_script: /opt/intelmq/var/lib/bots/sql/initdb.sql
        login_user: intelmq
        login_password: intelmq
    # SQLITE
