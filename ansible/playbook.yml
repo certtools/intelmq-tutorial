@@ -61,7 +61,6 @@
        - /opt/intelmq/var/lib/bots/file-output/
        - /opt/intelmq/var/lib/bots/maxmind_geoip/
        - /opt/intelmq/var/log/
-       - /opt/intelmq/etc/manager/
        - /opt/dev_intelmq
    - name: clone IntelMQ git repository
      git:
@@ -106,6 +105,9 @@
      copy:
        src: positions.conf
        dest: /opt/intelmq/etc/manager/positions.conf
+       owner: intelmq
+       group: www-data
+       mode: '0664'
    - name: provide default state file
      copy:
        src: state.json
