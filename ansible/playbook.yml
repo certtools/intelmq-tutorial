@@ -94,6 +94,20 @@
      with_items:
        - intelmqctl
        - intelmqdump
+   # INTELMQ OPTIONAL DEPENDENCIES
+   - name: Install pyasn
+     pip:
+       name: pyasn
+       executable: pip3
+     become: True
+   - name: Provide local lookup database for IP address to ASN
+     copy:
+       src: /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
+       dest: /opt/intelmq/var/lib/bots/asn_lookup/
+   - name: Provide local lookup database for IP address to Geolocation
+     copy:
+       src: /opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb
+       dest: /opt/intelmq/var/lib/bots/maxmind_geoip/
    # INTELMQ-MANAGER
    - name: clone IntelMQ Manager git repository
      git:
