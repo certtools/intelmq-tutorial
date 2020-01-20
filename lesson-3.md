@@ -16,11 +16,25 @@ run_modes
 
 ### Task: configure an output bot when sends to the (pre-configured) Postgres DB.
 
+The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can connect via IPv4 and IPv6 locally on port 5432 without SSL.
+Further, connecting via socket (and `psql` on the command line), every connection is trusted.
+The database `intelmq` contains a table `events` with the same schema as .
+
 Re-run the botnet, observe that data was sent to postgresql and that you can SELECT * it
 
 ### Answer
 
-
+Configuration parameters for the bot:
+* `autocommit`: `true` (default)
+* `database`: `intelmq`
+* `engine`: `postgresql`
+* `host`: `localhost`
+* `jsondict_as_string`: `true` (default)
+* `password`: `intelmq`
+* `port`: `5432`
+* `sslmode`: `allow` (no TLS available)
+* `table`: `events`
+* `user`: `intelmq`
 
 
 
