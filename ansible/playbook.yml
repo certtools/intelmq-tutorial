@@ -62,6 +62,7 @@
        - /opt/intelmq/var/lib/bots/file-output/
        - /opt/intelmq/var/lib/bots/maxmind_geoip/
        - /opt/intelmq/var/log/
+       - /opt/intelmq/var/run/
        - /opt/dev_intelmq
    - name: clone IntelMQ git repository
      git:
