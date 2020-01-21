@@ -154,9 +154,17 @@
        name: intelmq_webinput_csv >= 0.2.0
        executable: pip3
      become: True
+   - name: Enable Apache modules
+     apache2_module:
+       name: "{{item}}"
+     with_items:
+       - wsgi
+       - proxy
+       - proxy_http
+       - rewrite
    - name: Write Webinput Apache configuration
      copy:
-       src: 002_intelmq_webinput_csv.conf
+       src: apache.conf
        dest: /etc/apache2/sites-available/000-default.conf
    - name: Provide Webinput configuration
      copy:
@@ -216,3 +224,20 @@
      command: /usr/local/bin/ti-to-sqlite-cc.py --ti /opt/intelmq/var/lib/bots/sql/ti-teams.json /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
      args:
        creates: /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
+   # FODY
+   - name: install intelmq-fody-backend via pip from cert.at repository fork
+     pip:
+       name: git+http://github.com/certat/intelmq-fody-backend.git@staging#egg=intelmq_fody_backend&subdirectory=events_api
+       executable: pip3
+     become: True
+   - name: install intelmq-fody from pre-compiled archive (cert.at repository fork)
+     unarchive:
+       src: https://github.com/certat/intelmq-fody/releases/download/2020-01-21/intelmq-fody.tar.gz
+       dest: /var/www/html/
+       remote_src: yes
+     become: True
+   # LANDING PAGE
+   - name: install landing page
+     copy:
+       src: landingpage.html
+       dest: /var/www/html/index.html
