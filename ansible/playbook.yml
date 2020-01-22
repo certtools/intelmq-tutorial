@@ -48,6 +48,9 @@
          - libapache2-mod-php7.3
          - libapache2-mod-wsgi-py3
          - python3-bs4
+         - rabbitmq-server
+         - python3-pika
+         - pandoc
    # INTELMQ CORE
    - name: Create directories
      file:
@@ -245,16 +248,11 @@
        src: landingpage.html
        dest: /var/www/html/index.html
    # RabbitMQ
-   - name: install RabbitMQ
-     package:
-       name:
-         - rabbitmq-server
-         - python3-pika
    - name: Start RabbitMQ for configuration
      systemd:
        name: rabbitmq-server
        state: started
-   - copy: Enable RabbitMQ plugins
+   - name: Enable RabbitMQ plugins
      copy:
        src: enabled_plugins
        dest: /etc/rabbitmq/
@@ -271,3 +269,20 @@
        name: rabbitmq-server
        state: stopped
        enabled: no
+   # TUTORIAL
+   - name: Clone tutorial repository
+     git:
+       repo: https://github.com/certtools/intelmq-tutorial.git
+       dest: /home/user/intelmq-tutorial/
+       version: master
+     become_user: user
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
+   - name: Install tutorial HTML converter
+     copy:
+       src: tutorial-to-html.sh
+       dest: /usr/local/bin/
+       mode: '0755'
+   - name: Run tutorial HTML converter
+     command: /usr/local/bin/tutorial-to-html.sh
