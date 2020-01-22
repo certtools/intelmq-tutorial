@@ -244,3 +244,30 @@
      copy:
        src: landingpage.html
        dest: /var/www/html/index.html
+   # RabbitMQ
+   - name: install RabbitMQ
+     package:
+       name:
+         - rabbitmq-server
+         - python3-pika
+   - name: Start RabbitMQ for configuration
+     systemd:
+       name: rabbitmq-server
+       state: started
+   - copy: Enable RabbitMQ plugins
+     copy:
+       src: enabled_plugins
+       dest: /etc/rabbitmq/
+   - name: create RabbitMQ admin user
+     command: bash -c "rabbitmqctl list_users | egrep ^admin || sudo rabbitmqctl add_user admin admin"
+   - name: make RabbitMQ admin user an administrator
+     command: rabbitmqctl set_user_tags admin administrator management
+   - name: create RabbitMQ intelmq user
+     command: bash -c "rabbitmqctl list_users | egrep ^admin || sudo rabbitmqctl add_user admin admin"
+   - name: configure RabbitMQ intelmq user
+     command: rabbitmqctl set_user_tags intelmq montoring
+   - name: Stop and disable RabbitMQ
+     systemd:
+       name: rabbitmq-server
+       state: stopped
+       enabled: no
