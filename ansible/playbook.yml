@@ -162,7 +162,7 @@
        - proxy
        - proxy_http
        - rewrite
-   - name: Write Webinput Apache configuration
+   - name: Write Apache configuration
      copy:
        src: apache.conf
        dest: /etc/apache2/sites-available/000-default.conf
@@ -227,15 +227,18 @@
    # FODY
    - name: install intelmq-fody-backend via pip from cert.at repository fork
      pip:
-       name: git+http://github.com/certat/intelmq-fody-backend.git@staging#egg=intelmq_fody_backend&subdirectory=events_api
+       name: git+http://github.com/certat/intelmq-fody-backend.git@staging#egg=intelmq_fody_backend
        executable: pip3
-     become: True
    - name: install intelmq-fody from pre-compiled archive (cert.at repository fork)
      unarchive:
        src: https://github.com/certat/intelmq-fody/releases/download/2020-01-21/intelmq-fody.tar.gz
        dest: /var/www/html/
        remote_src: yes
      become: True
+   - name: Install Fody events api configuration
+     copy:
+       src: eventdb-serve.conf
+       dest: /etc/intelmq/
    # LANDING PAGE
    - name: install landing page
      copy:
