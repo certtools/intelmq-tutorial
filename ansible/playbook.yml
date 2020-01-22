@@ -263,7 +263,7 @@
    - name: make RabbitMQ admin user an administrator
      command: rabbitmqctl set_user_tags admin administrator management
    - name: create RabbitMQ intelmq user
-     command: bash -c "rabbitmqctl list_users | egrep ^admin || sudo rabbitmqctl add_user admin admin"
+     command: bash -c "rabbitmqctl list_users | egrep ^intelmq || sudo rabbitmqctl add_user intelmq intelmq"
    - name: configure RabbitMQ intelmq user
      command: rabbitmqctl set_user_tags intelmq montoring
    - name: Stop and disable RabbitMQ
