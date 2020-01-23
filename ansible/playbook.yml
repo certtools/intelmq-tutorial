@@ -170,11 +170,14 @@
        group: www-data
        mode: u+rw,g+rw
    # WEBINPUT
+   - name: install intelmq-webinput-csv dependencies
+     pip:
+       name: hug
+       executable: pip3
    - name: install intelmq-webinput-csv from pip
      pip:
        name: intelmq_webinput_csv >= 0.2.0
        executable: pip3
-     become: True
    - name: Enable Apache modules
      apache2_module:
        name: "{{item}}"
