@@ -124,12 +124,17 @@
        executable: pip3
      become: True
    - name: Provide local lookup database for IP address to ASN
-     copy:
-       src: /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
-       dest: /opt/intelmq/var/lib/bots/asn_lookup/
+     command: bash -c "pushd /tmp/ && pyasn_util_download.py --latestv46 && pyasn_util_convert.py --single rib.* /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat; popd"
+     args:
+       creates:
+         /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
+     become_user: intelmq
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
    - name: Provide local lookup database for IP address to Geolocation
      copy:
-       src: /opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb
+       src: GeoLite2-City.mmdb
        dest: /opt/intelmq/var/lib/bots/maxmind_geoip/
    - name: Download Malware Name Mapping
      command:
