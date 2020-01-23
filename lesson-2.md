@@ -1,6 +1,10 @@
 # Lesson 2: Getting started
 
 
+## Familiarization with the VM
+
+* how to read the web page on the VM
+
 ## Familiarization - where can I find what? A short walk-through the directory structure
 
 First of all, the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
