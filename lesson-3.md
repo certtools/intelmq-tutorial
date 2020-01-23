@@ -72,6 +72,17 @@ The bot is the "Generic DB Lookup" Expert.
 * `table`: `ti`
 * `user`: not relevant
 
+## Basic SMTP
+
+An SMTP server is runnin on localhost Port 25 without authentication. A webmail client is running at http://localhost:8080/webmail/ login is possible for example as `user@localhost`/`user` or `intelmq@localhost`/`intelmq`. `user` is a catchall for any non-existing mail addresses, including all domains.
+
+## RabbitMQ
+First start the RabbitMQ server:
+```bash
+sudo systemctl start rabbitmq-server.service
+```
+The management interface is available at port 1567, you can login with the credentials `admin`/`admin`.
+
 ## Interfacing with a ticket system
 
 ### mail-gen (theory)
