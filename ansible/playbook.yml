@@ -9,6 +9,8 @@
        group: intelmq
        home: /opt/intelmq
        shell: /usr/bin/bash
+       # "intelmq"
+       password: $6$bOYvo2a7$5dDEAH3HLvRio6rAKx45hrvVWtEVDwpMF4IE1oXeu4Y8exYVRlzS6yvAVkZt8QPBSqpMPX7km1ClyQWwqvcnu.
    - name: Setup sudoers
      copy:
        src: files/01_intelmq_tutorial
@@ -286,3 +288,51 @@
        mode: '0755'
    - name: Run tutorial HTML converter
      command: /usr/local/bin/tutorial-to-html.sh
+   # MAIL
+   - name: Install mailname
+     copy:
+       content: 'malaga'
+       dest: /etc/mailname
+   - name: Install postfix catchall
+     copy:
+       content: '/.*/'
+       dest: /etc/postfix/catchall
+   - name: Install postfix main.cf
+     copy:
+       src: main.cf
+       dest: /etc/postfix/
+   - name: reload postfix
+     systemd:
+       name: postfix
+       state: reloaded
+   - name: download rainloop
+     unarchive:
+       src: http://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
+       dest: /tmp/
+       remote_src: yes
+     args:
+       creates: /tmp/rainloop
+   - name: Create webmail directory
+     file:
+       path: /var/www/html/webmail/
+       state: directory
+   - name: install rainloop
+     copy:
+       src: /tmp/rainloop
+       dest: /var/www/html/webmail/
+       remote_src: yes
+   - name: install rainloop index file
+     copy:
+       src: /var/www/html/webmail/rainloop/v/1.13.0/index.php.root
+       dest: /var/www/html/webmail/index.php
+       remote_src: yes
+   - name: Install data directory
+     unarchive:
+       src: rainloop-data.tar.gz
+       dest: /var/www/html/webmail/
+   - name: Set file permissions on rainloop
+     file:
+       path: /var/www/html/webmail/
+       recurse: yes
+       owner: www-data
+       group: www-data
