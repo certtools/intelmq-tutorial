@@ -352,3 +352,9 @@
        recurse: yes
        owner: www-data
        group: www-data
+   # RESET
+   - name: install reset script
+     copy:
+       src: reset-intelmq.sh
+       dest: /usr/local/bin/
+       mode: '0755'
