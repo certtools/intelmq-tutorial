@@ -321,6 +321,11 @@
        mode: '0755'
    - name: Run tutorial HTML converter
      command: /usr/local/bin/tutorial-to-html.sh
+   - name: Install tutorial updater
+     copy:
+       src: tutorial-update.sh
+       dest: /usr/local/bin/
+       mode: '0755'
    # MAIL
    - name: Install mailname
      copy:
