@@ -10,5 +10,5 @@ sudo chown $USER $DIR
 for md in /home/user/intelmq-tutorial/*.md; do
     out="${md%%.md}.html"
     out="${out##*/}"
-    pandoc "$md" -o "$DIR/$out"
+    pandoc "$md" -f gfm -o "$DIR/$out"
 done
