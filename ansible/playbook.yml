@@ -11,6 +11,7 @@
        name: intelmq
        comment: IntelMQ user
        group: intelmq
+       groups: intelmq,sudo
        home: /opt/intelmq
        shell: /usr/bin/bash
        # "intelmq"

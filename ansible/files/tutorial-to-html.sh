@@ -2,6 +2,8 @@
 
 set -e
 
+[ "user" != "$USER" ] && exec sudo -u user $0 "$@"
+
 DIR=/var/www/html/tutorial/
 mkdir -p $DIR
 sudo chown $USER $DIR
