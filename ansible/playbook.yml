@@ -81,6 +81,7 @@
        - /opt/intelmq/var/lib/bots/asn_lookup/
        - /opt/intelmq/var/lib/bots/file-output/
        - /opt/intelmq/var/lib/bots/maxmind_geoip/
+       - /opt/intelmq/var/lib/bots/modify/
        - /opt/intelmq/var/log/
        - /opt/intelmq/var/run/
        - /opt/intelmq/etc/manager/
@@ -130,6 +131,14 @@
      copy:
        src: /opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb
        dest: /opt/intelmq/var/lib/bots/maxmind_geoip/
+   - name: Download Malware Name Mapping
+     command:
+       argv:
+       - /opt/dev_intelmq/contrib/malware_name_mapping/download_mapping.py
+       - --include-misp
+       - /opt/intelmq/var/lib/bots/modify/malware_name_mapping.json
+     args:
+       creates: /opt/intelmq/var/lib/bots/modify/malware_name_mapping.json
    # INTELMQ-MANAGER
    - name: clone IntelMQ Manager git repository
      git:
