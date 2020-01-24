@@ -4,7 +4,22 @@
 
 ## Scheduled bots
 
-run_modes, explain `intelmqctl (en/dis)able)`
+All the previously used collector bots use rate limiting: They are active once for fetching data and then idle for the configured time (for example one day).
+However it is also possible to use "scheduled" bots. They differ in their behavior:
+
+* They are "disabled" and not started by default (on `intelmqctl start`)
+* After starting them explicitly with `intelmqctl start my-scheduled-bot` they run once and then stop.
+
+In the runtime configuration there are two switches for all bots in order to achieve this behavior:
+* `enabled`: A boolean, behaves similar to systemd's enabled and disable states. This setting could also be called "autostart". The commands `intelmqctl enable my-bot` and `intelmqctl disable my-bot`, respectively, change this setting.
+* `run_mode`: either `continuous` or `scheduled`, the first is the default. The scheduled bots stop directly after running.
+
+Bots with this settings can be started by e.g. cron or systemd timers in regular intervals:
+
+```
+# start my-scheduled-bot every day at 6:20
+20 6 * * * /usr/local/bin/intelmqctl start my-scheduled-bot
+```
 
 ### Task: configure a file collector so that it fetches every 5 minutes. Observe in the log files that it was running
 
@@ -118,7 +133,7 @@ Settings:
 
 The fourth line is invalid (bad timestamp).
 
-* The box should say "Successfully processed 3 lines."
+On submission, the box should say "Successfully processed 3 lines.".
 
 ## Looking up contact data from a local database
 
