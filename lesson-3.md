@@ -20,7 +20,7 @@ The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can 
 Further, connecting via socket (and `psql` on the command line), every connection is trusted.
 The database `intelmq` contains a table `events` with the same schema as .
 
-Re-run the botnet, observe that data was sent to postgresql and that you can SELECT * it
+Re-run the botnet or any part of it and observe that data was sent to postgresql. Instructions how the data can be fetched are below.
 
 ### Answer
 
@@ -36,17 +36,89 @@ Configuration parameters for the bot:
 * `table`: `events`
 * `user`: `intelmq`
 
+### Looking at the database
 
+#### With psql
+
+```bash
+psql intelmq intelmq
+```
+
+As the table has a lot of columns, here is an example SQL query which selects only a few columns:
+```sql
+SELECT "time.source", "feed.name", "classification.taxonomy", "classification.type", "classification.identifier", "source.asn", "source.network", "source.ip", "source.fqdn", "source.reverse_dns", "source.geolocation.cc" FROM events;
+```
+
+To select some statistics:
+```sql
+SELECT extract(day from "time.source") AS day, "feed.name", "classification.type" FROM events GROUP BY day, "feed.name", "classification.type";
+```
+
+#### With fody
+
+Go to the installed fody interface at [`/stats`](http://localhost:8080/stats). You see a query interface which allows you to easily add a lot of "WHERE" clauses without writing actual SQL. In the first two rows you can select on the `time.source` column, the default is the last month. If the value is left empty, it is ignored.
+The "Resoulution" field and "View Stats" buttons can be ignored for only fetching data.
 
 ## Web-input (one-shot)
 
+The webinput interface available at [`/webinput/`](http://localhost:8080/webinput) allows interactive insertion of any CSV file into your IntelMQ instance.
+
+It consists of two views/steps: The upload and the preview.
+
+In the upload view you provide the data, either as file upload or as copy-pasted file. The "Parser Configuration" allows setting how the CSV should be parsed.
+
+The preview shows the CSV data as table and to the left some settings. The table header shows drop-down menus offering auto-completion to assign IntelMQ fields to the columns. The second row is a simple check-mark if the column should be used or not.
+
+On the left you can do some settings:
+* the default timezone, applied to time-columns if the fields do not already have timezone information
+* dry run: If true, all classification fields are set to "test". Un-tick the box when submitting data that should be processed.
+* classification type: As this is a fixed list, you can use the value from a fixed list. The resulting taxonomy is shown to you.
+* classification identifier: a free text (this field is added by a configuration option).
+
+Hint: "constant fields" can be added in the configuration of the webinput.
+
+The button "Refresh Table" causes the backend to parse the data according to the selected fields. Any not valid fields are shown in red and a summary is shown in the top left corner. If you detect any wrong mappings, you can adjust your settings. All rows containing any non-valid data are considered as "failed" and cannot be processed by IntelMQ.
+
+"Submit" will insert the data into the queue defined in the configuration. The Alert box shows if it works and how many rows have been inserted.
+
 ### Task: copy & paste example data into supplied web-input GUI
 
-Observe that the data is in Postgresql
+```csv
+time,address,malware,additional info
+# you need to skip this line`
+2020-01-22T23:12:24+02,10.0.0.1,zeus,very bad!!!
+2020-01-23T04:34:46+02,10.0.0.2,smokeloader,no further information available
+2020-01-24T15:52:05,10.0.0.3,spybot,"not, my, department!"
+2020-01-25T82:12:24+02,10.0.0.4,android.nitmo,huh?
+```
 
+Observe that the valid data is in Postgresql
 
 ### Answer
 
+The necessary settings on the upload are:
+* delimiter: `,`
+* quotechar: `"` (default)
+* escapechar: `\` (default)
+* has header: yes
+* skip initial space: no (default)
+* skip initial N lines: 1
+* Show N lines maximum in preview: anything above 4 (default)
+
+In the preview, the columns assignments are:
+* `time.source`
+* `source.ip`
+* `malware.name`
+* for example `event_description.text`
+
+Settings:
+* timezone: `+02:00`, for the line without time zone information.
+* classification type: `infected-system`
+* classification identifier: for example `malware`
+
+The fourth line is invalid (bad timestamp).
+
+* The box should say "Successfully processed 3 lines."
 
 ## Looking up contact data from a local database
 

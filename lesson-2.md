@@ -229,6 +229,8 @@ filter expert:
 * `filter_key`: `source.geolocation.cc`
 * `filter_value`: `NL`
 
+## Configure a feed:
+
 New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md#feeds-documentation) to add it!
 
 ### Task
@@ -275,9 +277,6 @@ The bot is the "ASN Lookup" expert. Parameters:
 Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
 
 ### Task: configure a new feed from local files
-
-
-### Task: configure a new feed (filecollector) and start und stop it
 
 Fetch `*.csv` files from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
 Save the configuration.
