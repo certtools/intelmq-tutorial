@@ -118,6 +118,12 @@
      with_items:
        - intelmqctl
        - intelmqdump
+   - name: provide default state file
+     copy:
+       src: state.json
+       dest: /opt/intelmq/var/lib/state.json
+       owner: intelmq
+       group: intelmq
    # INTELMQ OPTIONAL DEPENDENCIES
    - name: Install pyasn
      pip:
@@ -168,10 +174,6 @@
        owner: intelmq
        group: www-data
        mode: '0664'
-   - name: provide default state file
-     copy:
-       src: state.json
-       dest: /opt/intelmq/var/lib/state.json
    - name: Add www-data to the intelmq group
      user:
        name: www-data
