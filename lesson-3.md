@@ -20,7 +20,7 @@ The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can 
 Further, connecting via socket (and `psql` on the command line), every connection is trusted.
 The database `intelmq` contains a table `events` with the same schema as .
 
-Re-run the botnet, observe that data was sent to postgresql and that you can SELECT * it
+Re-run the botnet or any part of it and observe that data was sent to postgresql. Instructions how the data can be fetched are below.
 
 ### Answer
 
@@ -36,7 +36,28 @@ Configuration parameters for the bot:
 * `table`: `events`
 * `user`: `intelmq`
 
+### Looking at the database
 
+#### With psql
+
+```bash
+psql intelmq intelmq
+```
+
+As the table has a lot of columns, here is an example SQL query which selects only a few columns:
+```sql
+SELECT "time.source", "feed.name", "classification.taxonomy", "classification.type", "classification.identifier", "source.asn", "source.network", "source.ip", "source.fqdn", "source.reverse_dns", "source.geolocation.cc" FROM events;
+```
+
+To select some statistics:
+```sql
+SELECT extract(day from "time.source") AS day, "feed.name", "classification.type" FROM events GROUP BY day, "feed.name", "classification.type";
+```
+
+#### With fody
+
+Go to the installed fody interface at [`/stats`](http://localhost:8080/stats). You see a query interface which allows you to easily add a lot of "WHERE" clauses without writing actual SQL. In the first two rows you can select on the `time.source` column, the default is the last month. If the value is left empty, it is ignored.
+The "Resoulution" field and "View Stats" buttons can be ignored for only fetching data.
 
 ## Web-input (one-shot)
 
