@@ -1,7 +1,7 @@
 # Lesson 2: Getting started
 
 
-## Familiarization with the VM
+## Familiarization with the VM: makeing sure it works
 
 * How to read the tutorial web page on the VM
 * Does the internet connection work in the VM?
@@ -20,6 +20,13 @@ Now go to [http://localhost:8080/](http://localhost:8080/).
 You should see a small website like: 
 
 ![VM landing page](images/vm-landing-page.png)
+
+Finally, we need to make sure, that the VM can download data from the Internet.
+Please execute a `ping 8.8.8.8` or similar and make sure that DNS resolving works:
+
+```bash
+ping www.google.com
+```
 
 
 ## Familiarization - where can I find what? A short walk-through the directory structure
@@ -44,6 +51,7 @@ Directory layout:
 * `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
 
+
 #### Task: Where can I find the log files?
 
 #### Answer: `/opt/intelmq/var/log`
@@ -53,24 +61,24 @@ Directory layout:
 
 IntelMQ comes with a command line tool, called `intelmqctl`. It is the work-horse for interacting with IntelMQ. Therefore, we would like to make you familiar with it first. As in many other command line tool (compare for example the `apache2ctl` tool), these commands are provided:
 
-* `start`
-* `stop`
-* `status`
-* `reload`: schedules re-reading and applying configuration without stopping
-* `restart`
+* `intelmqctl start`
+* `intelmqctl stop`
+* `intelmqctl status`
+* `intelmqctl reload`: schedules re-reading and applying configuration without stopping
+* `intelmqctl restart`
 
 These commands take a `bot-id` as optional parameter. If not given, the command is applied to all configured bots.
 
 Other important commands:
 
-* `list queues`: Show configured queues and their sizes.
-* `check`: Runs some self-check on IntelMQ and supported bots.
-* `clear`: Clears the queue given as parameter.
-* `log`: Shows the last lines of the bot given as paramter.
+* `intelmqctl list queues`: Show configured queues and their sizes.
+* `intelmqctl check`: Runs some self-check on IntelMQ and supported bots.
+* `intelmqctl clear`: Clears the queue given as parameter.
+* `intelmqctl log`: Shows the last lines of the bot given as paramter.
 
 These commands are described later:
-* `enable`
-* `disable`
+* `intelmqctl enable`
+* `intelmqctl disable`
 
 You can get help with `intelmqctl -h` or `intelmqctl --help`, also available for sub-commands. Most subcommands also have auto-completion.
 
@@ -100,7 +108,7 @@ Start the `spamhaus-drop-collector` and verify in the logs that it successfully 
 
 The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  `spamhaus-drop-collector`.
 
-* Starting it: `intelmqctl start spamhaus-drop-collector`
+* Here is how you start it: `intelmqctl start spamhaus-drop-collector`
 * Here is how you look at its logs:
   * `intelmqctl log spamhaus-drop-collector` or (even simpler) `cd /opt/intelmq; less var/log/spamhaus-drop-collector.log`  should show you the log file:
 ```
@@ -115,7 +123,8 @@ The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  
 (note that your output might vary slightly).
 
 You can see that the INFO log level shows information on startup, the fetched URL and that the bots is then sleeping for one hour.
-* Stop the bot: `intelmqctl stop spamhaus-drop-collector`
+
+* Stopping the bot: `intelmqctl stop spamhaus-drop-collector`
 
 ### Lookup how many events are in the queue for a bot.
 
@@ -135,7 +144,7 @@ TODO: talk about collectors and parsers
 
 
 
-### Task: connect collector abuse.ch_feodo with a file output bot
+### Task: connect the abuse.ch_feodo collector bot with a file output bot
 
 
 ### Answer
