@@ -3,12 +3,14 @@
 
 ## Familiarization with the VM: makeing sure it works
 
+Before we start, we need to make sure everything works.
+
 * How to read the tutorial web page on the VM
 * Does the internet connection work in the VM?
+* How to reset the VM in case something goes wrong?
 
-### Answer
 
-It depends on how you configured your VirtualBox VM. The default network setup in VirtualBox is "NAT". Meaning, your VM is NATed to your PC. That means, your PC can reach the VM via port forwarding. The default config in the VM image (.ova) is that we forward the port 8080 on your PC/laptop to the VM port 80. See the screenshot below.
+Concerning access to the VM from your host system: this depends on how you configured your VirtualBox VM. The default network setup in VirtualBox is "NAT". Meaning, your VM is NATed to your PC. That means, your PC can reach the VM via port forwarding. The default config in the VM image (.ova) is that we forward the port 8080 on your PC/laptop to the VM port 80. See the screenshot below.
 
 ![port forwarding setup](images/vm-network-port-forwarding.png)
 
@@ -21,12 +23,15 @@ You should see a small website like:
 
 ![VM landing page](images/vm-landing-page.png)
 
-Finally, we need to make sure, that the VM can download data from the Internet.
+Next, we need to make sure, that the VM can download data from the Internet.
 Please execute a `ping 8.8.8.8` or similar and make sure that DNS resolving works:
 
 ```bash
 ping www.google.com
 ```
+
+And finally, if you get lost, the VM can be reset so that you have a clear baseline to start from.
+You can either create a [snaptshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
 
 
 ## Familiarization - where can I find what? A short walk-through the directory structure
