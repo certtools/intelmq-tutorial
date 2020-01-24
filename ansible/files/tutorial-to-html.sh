@@ -13,4 +13,4 @@ for md in /home/user/intelmq-tutorial/*.md; do
     pandoc "$md" -f gfm -o "$DIR/$out"
 done
 
-sudo cp -R /home/user/intelmq-tutorial/images/ /var/www/html/tutorial/
+cp -R /home/user/intelmq-tutorial/images/ /var/www/html/tutorial/

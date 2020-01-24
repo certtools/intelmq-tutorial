@@ -17,3 +17,9 @@ sudo cp /home/user/intelmq-tutorial/ansible/files/landingpage.html /var/www/html
 # install update-vm script
 sudo cp /home/user/intelmq-tutorial/update-vm.sh /usr/local/bin/
 sudo chmod +x /usr/local/bin/update-vm.sh
+
+# update intelmq
+pushd /opt/dev_intelmq/
+sudo -u intelmq git pull --rebase origin master
+popd
+sudo pip3 install -e /opt/dev_intelmq/
