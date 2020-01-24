@@ -4,6 +4,7 @@
 ## Familiarization with the VM
 
 * How to read the tutorial web page on the VM
+* Does the internet connection work in the VM?
 
 ### Answer
 
@@ -26,7 +27,7 @@ You should see a small website like:
 After making sure that we can reach the VM from the host (your PC or laptop), we can take a look at the VM's setup.
 
 But first let us say that the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
-the documentation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the [Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
+the documenation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the [Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
 
 ### The directory structure and command line  tools
 
@@ -40,7 +41,7 @@ Directory layout:
 * `/opt/intelmq/etc/`: The configuration files.
 * `/opt/intelmq/var/lib/`: Data of IntelMQ and it's bots:
 * `/opt/intelmq/var/lib/bots/`: For example configuration files of certain bots, local lookup data and output files.
-* `/opt/intelmq/var/log/`: The log files of all bots and dumped data.
+* `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
 
 #### Task: Where can I find the log files?
@@ -65,7 +66,7 @@ Other important commands:
 * `list queues`: Show configured queues and their sizes.
 * `check`: Runs some self-check on IntelMQ and supported bots.
 * `clear`: Clears the queue given as parameter.
-* `log`: Shows the last lines of the bot given as parameter.
+* `log`: Shows the last lines of the bot given as paramter.
 
 These commands are described later:
 * `enable`
@@ -128,13 +129,9 @@ Start the `spamhaus-drop-collector` and look up how many events are waiting to b
 deduplicator-expert-queue - 807
 ```
 
-## The IntelMQ manager
-
-Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
-
 ## Simple input and output bots
 
-... blabla talk about collectors and parsers
+TODO: talk about collectors and parsers
 
 
 
@@ -148,21 +145,33 @@ Intro, screenshots, text description. What can it do for you, when is it better 
 
 Filter on the country code NL
 
-### Task : create a filter and filter on NL
+
+### Task : filter data on country
+
+The Feodo tracker by abuse.ch provides some feeds, the [HTML "feed"](https://feodotracker.abuse.ch/browse/) provides the most information for the C&C server IP addresses including the country and the malware.
+
+Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt`.
 
 ### Answer
 
+Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
 
-## Configure a feed: 
+#### Detailed answer
 
+filter expert:
+* `filter_key`: `source.geolocation.cc`
+* `filter_value`: `NL`
 
-<XXX insert description by sebix XXX>
+New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md#feeds-documentation) to add it!
 
-<comment: use a feed here which does not have country code info so that we can add it in the next task>
+### Task
+Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) and start the collector and parser.
 
-### Task : XXX
+TODO: not to the output yet.
 
 ### Answer
+
+TODO: Copy and paste from the documentation
 
 
 ## Experts: adding information to the stream
@@ -171,11 +180,17 @@ The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains t
 
 ### Task: add geoip info to the previous feed
 
+Geolocation information is crucial to determine how to act on received data.
+The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
+
+Add a geolocation lookup bot to your pipeline and run it and all subsequent bots to see the data in the file.
 
 ### Answer
 
-The bot is the "MaxMind GeoIP Expert". Parameters:
+The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 * `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
+
+TODO: How to check
 
 ## Experts: add IP 2 ASN enrichment
 
@@ -188,9 +203,16 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
 
+## The IntelMQ manager
+
+Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
+
 ### Task: configure a new feed from local files
 
-Fetch `*.csv` files every 12 hours (43200 seconds) from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
+
+### Task: configure a new feed (filecollector) and start und stop it
+
+Fetch `*.csv` files from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
 Save the configuration.
 Start the both newly added bots.
 
@@ -201,13 +223,11 @@ Parameters for the "File" collector:
 * `delete_file`: `false`
 * `path`: `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/`
 * `postfix`: `.csv`
-* `rate_limit`: `43200`
 * `provider`: `Shadowserver`
 
 Parameters for the "ShadowServer" parser:
 * `feedname`: not needed, the exact feed will be determined from the file name
 * `overwrite`: `true`: this will set the `feed.name` field properly
-
 
 # Recap
 
