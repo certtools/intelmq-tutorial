@@ -4,6 +4,10 @@ This repository will contain a tutorial and learning material for [IntelMQ](http
 
 The tutorial is structured into multiple lessons. Each leasons consists of multiple tasks. Answers are given, but we encourage you to not look up the answer before trying.
 
+  * [Lesson 1](lesson-1.md): theoretical concepts
+  * [Lesson 2](lesson-2.md): getting started - hands on - with IntelMQ
+  * [Lesson 3](lesson-3.md): advanced IntelMQ topics
+
 
 ## Contribute!
 
