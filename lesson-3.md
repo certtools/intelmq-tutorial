@@ -4,7 +4,7 @@
 
 ## Scheduled bots
 
-run_modes
+run_modes, explain `intelmqctl (en/dis)able)`
 
 ### Task: configure a file collector so that it fetches every 5 minutes. Observe in the log files that it was running
 
