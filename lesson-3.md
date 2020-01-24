@@ -23,6 +23,8 @@ Bots with this settings can be started by e.g. cron or systemd timers in regular
 
 ### Task: configure a file collector so that it fetches every 5 minutes. Observe in the log files that it was running
 
+TODO
+
 ### Answer
 
 
@@ -161,14 +163,18 @@ The bot is the "Generic DB Lookup" Expert.
 
 ## Basic SMTP
 
-An SMTP server is runnin on localhost Port 25 without authentication. A webmail client is running at http://localhost:8080/webmail/ login is possible for example as `user@localhost`/`user` or `intelmq@localhost`/`intelmq`. `user` is a catchall for any non-existing mail addresses, including all domains.
+An SMTP server is running on localhost Port 25 without authentication. A webmail client is running at http://localhost:8080/webmail/ login is possible for example as `user@localhost`/`user` or `intelmq@localhost`/`intelmq`. `user` is a catchall for any non-existing mail addresses, including all domains.
+
+TODO: Add task
 
 ## RabbitMQ
 First start the RabbitMQ server:
 ```bash
 sudo systemctl start rabbitmq-server.service
 ```
-The management interface is available at port 1567, you can login with the credentials `admin`/`admin`.
+The management interface is available at port 15672, you can login with the credentials `admin`/`admin`.
+
+TODO: Add task
 
 ## Interfacing with a ticket system
 

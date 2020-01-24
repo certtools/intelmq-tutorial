@@ -4,7 +4,7 @@ set -e
 
 [ "root" != "$USER" ] && exec sudo $0 "$@"
 
-pkill -u intelmq -f "/usr/bin/python3 /usr/local/bin/intelmq.bots"
+pkill -u intelmq -9 -f "/usr/bin/python3 /usr/local/bin/intelmq.bots" ||:
 
 redis-cli -c "flushall"
 

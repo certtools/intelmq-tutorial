@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # wrong permissions on state file
 sudo chown intelmq:intelmq /opt/intelmq/var/lib/state.json
 
@@ -14,4 +16,4 @@ sudo cp /home/user/intelmq-tutorial/ansible/files/landingpage.html /var/www/html
 
 # install update-vm script
 sudo cp /home/user/intelmq-tutorial/update-vm.sh /usr/local/bin/
-chmod +x /usr/local/bin/update-vm.sh
+sudo chmod +x /usr/local/bin/update-vm.sh
