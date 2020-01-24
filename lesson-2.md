@@ -76,7 +76,7 @@ Other important commands:
 * `intelmqctl clear`: Clears the queue given as parameter.
 * `intelmqctl log`: Shows the last lines of the bot given as paramter.
 
-These commands are described later:
+The following commands will be described later:
 * `intelmqctl enable`
 * `intelmqctl disable`
 
