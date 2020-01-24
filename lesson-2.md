@@ -9,7 +9,7 @@
 ## Familiarization - where can I find what? A short walk-through the directory structure
 
 First of all, the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
-the documenation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
+the documentation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
 
 ### The directory structure and command line  tools
 
@@ -19,7 +19,7 @@ A "development installation" has been chosen as installation method so that all 
 * `/opt/intelmq/etc/`: The configuration files.
 * `/opt/intelmq/var/lib/`: Data of IntelMQ and it's bots:
 * `/opt/intelmq/var/lib/bots/`: For example configuration files of certain bots, local lookup data and output files.
-* `/opt/intelmq/var/log/`: The log files and dumped data.
+* `/opt/intelmq/var/log/`: The log files of all bots and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
 
 ### Where can I find the log files?
@@ -38,7 +38,7 @@ Further important commands:
 * list queues: Show configured queues and their sizes.
 * check: Runs some self-check on IntelMQ and supported bots.
 * clear: Clears the queue given as parameter.
-* log: Shows the last lines of the bot given as paramter.
+* log: Shows the last lines of the bot given as parameter.
 
 These commands are described later:
 * enable
@@ -90,6 +90,10 @@ Start the `spamhaus-drop-collector` and look up how many events are waiting to b
 ```
 deduplicator-expert-queue - 807
 ```
+
+## The IntelMQ manager
+
+Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
 
 ## Simple input and output bots
 
@@ -162,13 +166,9 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
 
-## The IntelMQ manager
-
-Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
-
 ### Task: configure a new feed from local files
 
-Fetch `*.csv` files from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
+Fetch `*.csv` files every 12 hours (43200 seconds) from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
 Save the configuration.
 Start the both newly added bots.
 
@@ -179,6 +179,7 @@ Parameters for the "File" collector:
 * `delete_file`: `false`
 * `path`: `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/`
 * `postfix`: `.csv`
+* `rate_limit`: `43200`
 * `provider`: `Shadowserver`
 
 Parameters for the "ShadowServer" parser:
