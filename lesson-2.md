@@ -149,7 +149,6 @@ deduplicator-expert-queue - 807
 
 ## Simple input and output bots
 
-TODO: talk about collectors and parsers
 
 
 So far, we can start and stop bots and check in their respective log files, if they did anything. We can also check how many messages are waiting in which queue. You will need these steps over and over again, especially if something breaks. The log files are your friend! Use them :)
@@ -159,15 +158,41 @@ Next, we will collect real abuse.ch data from the internet, parse it and send th
 
 ### Task: connect the abuse.ch_feodo collector bot with a file output bot and look at the output
 
+Our default configuration has a number of bots which need to get started in order to have a full pipeline path between the abuse.ch_feodo collector and the file output bot. You can see the pipeline which is configured by default in two ways:
+
+  1. via the `etc/pipeline.conf` file
+  2. via the IntelMQ manager. 
+
+We will look at the manager in a minute.
+
+First, please look at the the `etc/pipeline.conf` and identify the path the events are taking between the feodo collector and the ouput. Start each bot individually and observe the message queues and the status.
+
+Next, check if the feodo collector indeed fetched all the data, passed it through the "botnet" and sent it to the file-output bot, which in turn wrote it to disk.
 
 ### Answer
 
 * `intelmqctl start feodo-tracker-browse-collector`
-* `intelmqctl start feodo-tracker-browse-collector`
-* `intelmqctl list queues -q`   # shows all non-empty queues:
-```
-deduplicator-expert-queue - 807
-```
+* `intelmqctl start feodo-tracker-browse-parser`
+* `intelmqctl start deduplicator-expert`
+* `intelmqctl start url2fqdn-expert`
+* `intelmqctl start gethostbyname-1-expert`
+* `intelmqctl start gethostbyname-2-expert`
+* `intelmqctl start cymru-whois-expert`
+* `intelmqctl start file-output`
+
+Make sure the bots are indeed running and that they fetched something from the Internet and parsed it:
+
+* `intelmqctl status`
+* `cat /opt/intelmq/var/log/*feodo*.log`
+
+TODO: sebix please verify + add a sample output
+
+
+And finally, we would like to take a look at its output: the output bot (which is by default the place where all events are sent to in our initial configuration) should show you the feodo events:
+
+* `cat /opt/intelmq/var/lib/bots/file-output/events.txt`
+
+TODO: sebix please add a sample output
 
 
 ### If something went wrong
@@ -175,6 +200,12 @@ deduplicator-expert-queue - 807
 This bot already downloads data from the Internet. If your internet connection does not work (ping www.google.com), then it can't download anything. 
 
 Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
+
+### Visualizing everything
+
+You can also go to the graphical interface and observe the pipeline: [http://localhost:8080/manager](http://localhost:8080/manager).
+
+TODO insert screenshot
 
 
 ## Input output and filters
