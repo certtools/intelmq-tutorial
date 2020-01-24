@@ -302,6 +302,10 @@
      command: bash -c "rabbitmqctl list_users | egrep ^intelmq || sudo rabbitmqctl add_user intelmq intelmq"
    - name: configure RabbitMQ intelmq user
      command: rabbitmqctl set_user_tags intelmq montoring
+   - name: allow intelmq user access to vhost /
+     command: rabbitmqctl set_permissions intelmq ".*" ".*" ".*"
+   - name: allow admin user access to vhost /
+     command: rabbitmqctl set_permissions admin ".*" ".*" ".*"
    - name: Stop and disable RabbitMQ
      systemd:
        name: rabbitmq-server
