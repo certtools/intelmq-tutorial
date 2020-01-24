@@ -126,28 +126,55 @@ You can see that the INFO log level shows information on startup, the fetched UR
 
 * Stopping the bot: `intelmqctl stop spamhaus-drop-collector`
 
+### If something went wrong
+
+This bot already downloads data from the Internet. If your internet connection does not work (ping www.google.com), then it can't download anything. 
+
 ### Lookup how many events are in the queue for a bot.
 
-Start the `spamhaus-drop-collector` and look up how many events are waiting to be processed in the queue of the next bot (`deduplicator-expert`).
+Every bot talks with other bots via **queues**. Queues are basically message queues in a MQ system (by default, IntelMQ uses Redis as MQ system). Messages are basically log lines which should get processed.
+
+Next, we would like to start the `spamhaus-drop-collector` again and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
 
 ### Answer
 
 * `intelmqctl start spamhaus-drop-parser`
-* `intelmqctl list queues -q` shows all non-empty queues, for example:
+* `intelmqctl list queues -q`   # shows all non-empty queues:
 ```
 deduplicator-expert-queue - 807
 ```
+
+(your output might vary slightly).
+
 
 ## Simple input and output bots
 
 TODO: talk about collectors and parsers
 
 
+So far, we can start and stop bots and check in their respective log files, if they did anything. We can also check how many messages are waiting in which queue. You will need these steps over and over again, especially if something breaks. The log files are your friend! Use them :)
 
-### Task: connect the abuse.ch_feodo collector bot with a file output bot
+Next, we will collect real abuse.ch data from the internet, parse it and send the output to a file.
+
+
+### Task: connect the abuse.ch_feodo collector bot with a file output bot and look at the output
 
 
 ### Answer
+
+* `intelmqctl start feodo-tracker-browse-collector`
+* `intelmqctl start feodo-tracker-browse-collector`
+* `intelmqctl list queues -q`   # shows all non-empty queues:
+```
+deduplicator-expert-queue - 807
+```
+
+
+### If something went wrong
+
+This bot already downloads data from the Internet. If your internet connection does not work (ping www.google.com), then it can't download anything. 
+
+Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
 
 
 ## Input output and filters
