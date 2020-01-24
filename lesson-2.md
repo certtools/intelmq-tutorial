@@ -4,6 +4,7 @@
 ## Familiarization with the VM
 
 * how to read the web page on the VM
+* Does the internet connection work in the VM?
 
 ## Familiarization - where can I find what? A short walk-through the directory structure
 
@@ -45,7 +46,7 @@ These commands are described later:
 
 You can get help with `-h` or `--help`, also available for sub-commands. Most subcommands also have auto-completion.
 
-Further commands and documentation can also be found in the [IntelMQ documentation]([here](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
+Further commands and documentation can also be found in the [IntelMQ documentation](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
 
 ## Default configuration
 
@@ -64,7 +65,9 @@ Start the `spamhaus-drop-collector` and verify in the logs that it successfully 
 
 * Starting: `intelmqctl start spamhaus-drop-collector`
 * Looking at the logs:
-  * `intelmqctl log spamhaus-drop-collector` or `less var/log/spamhaus-drop-collector.log` or similar should give an output like:
+  * `intelmqctl log spamhaus-drop-collector` or
+  * `less var/log/spamhaus-drop-collector.log` or similar
+  should give an output like:
 ```
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - HTTPCollectorBot initialized with id spamhaus-drop-collector and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 6950.
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - Bot is starting.
@@ -90,7 +93,7 @@ deduplicator-expert-queue - 807
 
 ## Simple input and output bots
 
-... blabla talk about collectors and parsers
+TODO: talk about collectors and parsers
 
 
 
@@ -104,34 +107,49 @@ deduplicator-expert-queue - 807
 
 Filter on the country code NL
 
-### Task : create a filter and filter on NL
+### Task : filter data on country
+
+The Feodo tracker by abuse.ch provides some feeds, the [HTML "feed"](https://feodotracker.abuse.ch/browse/) provides the most information for the C&C server IP addresses including the country and the malware.
+
+Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt`.
 
 ### Answer
 
+Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
+
+#### Detailed answer
+
+filter expert:
+* `filter_key`: `source.geolocation.cc`
+* `filter_value`: `NL`
 
 ## Configure a feed: 
 
+New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md#feeds-documentation) to add it!
 
-<XXX insert description by sebix XXX>
+### Task
+Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) and start the collector and parser.
 
-<comment: use a feed here which does not have country code info so that we can add it in the next task>
-
-### Task : XXX
+TODO: not to the output yet.
 
 ### Answer
-
+TODO: Copy and paste from the documentation
 
 ## Experts: adding information to the stream
 
-The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
-
 ### Task: add geoip info to the previous feed
 
+Geolocation information is crucial to determine how to act on received data.
+The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
+
+Add a geolocation lookup bot to your pipeline and run it and all subsequent bots to see the data in the file.
 
 ### Answer
 
-The bot is the "MaxMind GeoIP Expert". Parameters:
+The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 * `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
+
+TODO: How to check
 
 ## Experts: add IP 2 ASN enrichment
 
@@ -148,10 +166,24 @@ The bot is the "ASN Lookup" expert. Parameters:
 
 Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
 
-### Task: configure a new feed (filecollector) and start und stop it
+### Task: configure a new feed from local files
+
+Fetch `*.csv` files from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
+Save the configuration.
+Start the both newly added bots.
+
 
 ### Answer
 
+Parameters for the "File" collector:
+* `delete_file`: `false`
+* `path`: `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/`
+* `postfix`: `.csv`
+* `provider`: `Shadowserver`
+
+Parameters for the "ShadowServer" parser:
+* `feedname`: not needed, the exact feed will be determined from the file name
+* `overwrite`: `true`: this will set the `feed.name` field properly
 
 
 # Recap
