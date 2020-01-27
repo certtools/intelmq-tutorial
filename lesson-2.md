@@ -268,9 +268,9 @@ New feeds can be configured by adding a collector and the matching parser. The [
 ### Task
 Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains).
 
-Stop the deduplicator and then start the configured collector and parser.
+Stop the Bot `deduplicator-expert` (so we can use the data for the next tasks) and then start the configured collector and parser.
 
-TODO: not to the output yet.
+Verify the events were processed by checking the queue size of the bot `deduplicator-expert`.
 
 ### Answer
 
@@ -320,6 +320,14 @@ Pipeline configuration:
     },
 ```
 
+* `intelmqctl stop deduplicator-expert`
+* `intelmqctl start bambenek-c2-domains-collector` (depending on which ID you gave your new bot)
+* `intelmqctl start bambenek-parser` (depending on which ID you gave your new bot)
+* `intelmqctl list queues -q`
+```
+deduplicator-expert-queue - 807
+```
+(Your output may slightly vary)
 
 ## Experts: adding information to the stream
 
@@ -328,22 +336,34 @@ The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains t
 ### Task: add geoip info to the previous feed
 
 Geolocation information is crucial to determine how to act on received data.
-The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
+The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database for fast local lookups.
 
-Add a geolocation lookup bot to your pipeline and run it and all subsequent bots to see the data in the file.
+Add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
+Start all needed bots to see the data in the file.
 
 ### Answer
 
 The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 * `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
-TODO: How to check
+![Screenshot of the pipeline setup](images/lesson-2-geoip.png)
+
+* `intelmqctl start deduplicator-expert`
+* `intelmqctl start maxmind-geoip-expert` (depending on which ID you gave your new bot)
+* `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
+```
+...
+{"classification.taxonomy": "malicious code", "classification.type": "c2server", "event_description.text": "Domain used by virut", "event_description.url": "http://osint.bambenekconsulting.com/manual/virut.txt", "feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "malware.name": "virut", "raw": "d296dXVwLmNvbSxEb21haW4gdXNlZCBieSB2aXJ1dCwyMDIwLTAxLTI3IDEyOjExLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC92aXJ1dC50eHQ=", "source.fqdn": "wozuup.com", "source.geolocation.cc": "US", "source.geolocation.city": "San Francisco", "source.geolocation.latitude": 37.7506, "source.geolocation.longitude": -122.4121, "source.ip": "192.0.78.12", "status": "online", "time.observation": "2020-01-27T12:37:55+00:00", "time.source": "2020-01-27T12:11:00+00:00"}
+```
+As you can see, the data contains several `source.geolocation.*` fields including the country, city and coordinates.
 
 ## Experts: add IP 2 ASN enrichment
 
 The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data downloaded and converted by pyasn's utilities.
 
 ### Task
+
+Add a ASN lookup bot to your pipeline after your configured Bambenek Parser and connect it with the 
 
 ### Answer
 
