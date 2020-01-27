@@ -49,7 +49,7 @@ After making sure that we can reach the VM from the host (your PC or laptop), we
 But first let us say that the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
 the documenation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the [Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
 
-### The directory structure and command line  tools
+### The directory structure and command line tools
 
 IntelMQ knows multiple ways of getting installed: .deb packages, .rpm, or via pip or via git clone. Also, we distinguish between a production installation and a development installation.
 
@@ -64,10 +64,24 @@ Directory layout:
 * `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
 
+### Working on the shell
 
-#### Task: Where can I find the log files?
+IntelMQ uses it's own unprivileged user `intelmq`. Always work as this user, otherwise you might screw up some file permissions!
 
-#### Answer: `/opt/intelmq/var/log`
+To change the user, for example run:
+```bash
+sudo -iu intelmq
+```
+
+
+#### Task: Log file location
+
+Where can I find the log files?
+
+<details>
+  <summary>Click to see the answer.</summary>
+In `/opt/intelmq/var/log`
+</details>
 
 
 ### intelmqctl
@@ -95,7 +109,7 @@ The following commands will be described later:
 
 You can get help with `intelmqctl -h` or `intelmqctl --help`, also available for sub-commands. Most subcommands also have auto-completion.
 
-A complete list of  available commands can  be found in the [IntelMQctl documentation](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
+A complete list of  available commands can be found in the [intelmqctl documentation](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
 
 ## Default configuration
 
@@ -249,7 +263,7 @@ Filter on the country code NL
 
 The Feodo tracker by abuse.ch provides some feeds, the [HTML "feed"](https://feodotracker.abuse.ch/browse/) provides the most information for the C&C server IP addresses including the country and the malware.
 
-Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt`.
+Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt` by adding the filter after the parser and connecting it to a newly created file output bot.
 
 ### Answer
 
@@ -328,6 +342,31 @@ Pipeline configuration:
 deduplicator-expert-queue - 807
 ```
 (Your output may slightly vary)
+
+### Understand the deduplicator
+
+#### Task: See how data gets "deduplicated"
+
+Restart a collector which was already running. The file output should not get any new data. Why is this the case and how can you prevent it?
+
+#### Answer
+
+The deduplicator is configurable. The default works as following:
+* Ignores the fields "time.observation" and "raw"
+* Hashes the remaining data
+* Checks if this hash is already in it's cache
+  * If yes, the event is ignored
+  * If no, the hash is inserted into the cache with a TTL of one day. The event is forwarded to the next bot.
+
+If the upstream data did not change, the parsed data is the same as before (except for the "time.observation" field).
+
+#### Task: Bypass the deduplicator
+
+For testing and demo purposes it is helpful to temporarily deactivate this behavior by setting the parameter "bypass" to "true".
+
+#### Answer
+
+To add this parameter to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
 
 ## Experts: adding information to the stream
 

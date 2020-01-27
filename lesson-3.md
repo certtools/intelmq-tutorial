@@ -21,13 +21,28 @@ Bots with this settings can be started by e.g. cron or systemd timers in regular
 20 6 * * * /usr/local/bin/intelmqctl start my-scheduled-bot
 ```
 
-### Task: configure a file collector so that it fetches every 5 minutes. Observe in the log files that it was running
+### Task: configure a scheduled bot
+
+Add a file collector for TODO 
+
+Configure cron to run the bot every 5 minutes.
+
+Start it manually to check if it correctly stop after the run.
+
+Observe in the log file that it was running.
 
 TODO
 
 ### Answer
 
+* `intelmqctl start TODO`
+```
 
+```
+* Run `crontab -e` and add at the end of the file:
+```
+*/5 * * * * /usr/local/bin/intelmqctl start TODO
+```
 
 ## PostgreSQL DB and DB output
 
@@ -37,7 +52,9 @@ The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can 
 Further, connecting via socket (and `psql` on the command line), every connection is trusted.
 The database `intelmq` contains a table `events` with the same schema as .
 
-Re-run the botnet or any part of it and observe that data was sent to postgresql. Instructions how the data can be fetched are below.
+Add an output bot for postgresql in parallel to the file-output.
+
+Re-run the botnet or any collector and observe that data was sent to postgresql. Instructions how the data can be fetched are below.
 
 ### Answer
 
