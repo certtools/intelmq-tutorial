@@ -1,6 +1,7 @@
 # IntelMQ Tutorial
 
-This repository will contain a tutorial and learning material for [IntelMQ](https://github.com/certtools/intelmq/).
+This repository  contains a tutorial and learning material for [IntelMQ](https://github.com/certtools/intelmq/).
+It is accompanied by a [VirtualBox VM image](https://intelmq.org/tutorial/workshop-vm-20200131.ova), which allows you to follow every step. Please download and get the VM image running in VirtualBox.
 
 The tutorial is structured into multiple lessons. Each leasons consists of multiple tasks. Answers are given, but we encourage you to not look up the answer before trying.
 
