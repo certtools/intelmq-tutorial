@@ -268,6 +268,7 @@ Then (re-)start the collector bot.
 <details>
     <summary>Click to see the answer.</summary>
 
+#### Answer
 Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
 
 #### Detailed answer
@@ -290,6 +291,8 @@ Verify the events were processed by checking the queue size of the bot `deduplic
 
 <details>
     <summary>Click to see the answer.</summary>
+
+#### Answer
 Runtime configuration:
 ```json
     "bambenek-c2-domains-collector": {
@@ -354,6 +357,8 @@ Restart a collector which was already running. The file output should not get an
 
 <details>
     <summary>Click to see the answer.</summary>
+
+##### Answer
 The deduplicator is configurable. The default works as following:
 * Ignores the fields "time.observation" and "raw"
 * Hashes the remaining data
@@ -370,6 +375,8 @@ For testing and demo purposes it is helpful to temporarily deactivate this behav
 
 <details>
     <summary>Click to see the answer.</summary>
+
+##### Answer
 To add this parameter to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
 </details>
 
@@ -387,6 +394,8 @@ Start all needed bots to see the data in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
+
+#### Answer
 The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 * `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
@@ -408,12 +417,16 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 
 ### Task
 
-Add a ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
+Add an ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
+
+#### Answer
 The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
+
+![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
 </details>
 
 ## The IntelMQ manager
@@ -430,6 +443,8 @@ This requires IntelMQ version 2.1.2.
 
 <details>
     <summary>Click to see the answer.</summary>
+
+#### Answer
 Parameters for the "File" collector:
 * `delete_file`: `false`
 * `path`: `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/`
