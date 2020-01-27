@@ -21,6 +21,11 @@ Bots with this settings can be started by e.g. cron or systemd timers in regular
 20 6 * * * /usr/local/bin/intelmqctl start my-scheduled-bot
 ```
 
+To make a bot "scheduled", apply these two settings:
+* `enabled`: `false`
+* `run_mode`: `scheduled`
+These settings are not "parameters" as the other normal parameters you applied until now. In the `runtime.conf` these settings are on the same level as `module` and others.
+
 ### Task: configure a scheduled bot
 
 Add a file collector for TODO 
