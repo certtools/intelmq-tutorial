@@ -1,6 +1,9 @@
 # Lesson 3: Advanced usage of IntelMQ
 
-## (theory): which other bots exist (collectors, parsers, enrichers, output) and where to read about them
+## Which other bots exist (collectors, parsers, enrichers, output) and where to read about them
+
+The documentation for all bots can be found in the [Bots.md](https://github.com/certtools/intelmq/blob/master/docs/Bots.md) file.
+In this lesson, you will need the documentation several times, so better keep it open!
 
 ## Scheduled bots
 
@@ -38,7 +41,10 @@ Observe in the log file that it was running.
 
 TODO
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
 
 * `intelmqctl start TODO`
 ```
@@ -48,6 +54,7 @@ TODO
 ```
 */5 * * * * /usr/local/bin/intelmqctl start TODO
 ```
+</details>
 
 ## PostgreSQL DB and DB output
 
@@ -61,7 +68,10 @@ Add an output bot for postgresql in parallel to the file-output.
 
 Re-run the botnet or any collector and observe that data was sent to postgresql. Instructions how the data can be fetched are below.
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
 
 Configuration parameters for the bot:
 * `autocommit`: `true` (default)
@@ -74,6 +84,7 @@ Configuration parameters for the bot:
 * `sslmode`: `allow` (no TLS available)
 * `table`: `events`
 * `user`: `intelmq`
+</details>
 
 ### Looking at the database
 
@@ -131,9 +142,12 @@ time,address,malware,additional info
 2020-01-25T82:12:24+02,10.0.0.4,android.nitmo,huh?
 ```
 
-Observe that the valid data is in Postgresql
+Observe that the valid data is in the PostgreSQL database.
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
 
 The necessary settings on the upload are:
 * delimiter: `,`
@@ -158,6 +172,7 @@ Settings:
 The fourth line is invalid (bad timestamp).
 
 On submission, the box should say "Successfully processed 3 lines.".
+</details>
 
 ## Looking up contact data from a local database
 
@@ -168,7 +183,10 @@ The data is from TI and contains all national CERTs listed there.
 ### Task:
 Configure a bot so that all data (with country information) gets the national's CERT addresses as `source.abuse_contact`.
 
-### Answer:
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
 
 The bot is the "Generic DB Lookup" Expert.
 * `database`: `/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite`
@@ -183,11 +201,36 @@ The bot is the "Generic DB Lookup" Expert.
 * `table`: `ti`
 * `user`: not relevant
 
+</smtp>
+
 ## Basic SMTP
 
 An SMTP server is running on localhost Port 25 without authentication. A webmail client is running at http://localhost:8080/webmail/ login is possible for example as `user@localhost`/`user` or `intelmq@localhost`/`intelmq`. `user` is a catchall for any non-existing mail addresses, including all domains.
 
-TODO: Add task
+Hint: The default configuration for the SMTP Bot has STARTTLS set to true, which is not supported by the local mailserver.
+
+### Send data to a local recipient
+
+Configure the SMTP Output so that it sends events to abuse contact as fetched by the previously configured bot.
+
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
+
+* `fieldnames`: As you like, for example `time.source,feed.name,classification.taxonomy,classification.type,classification.identifier,source.asn,source.network,source.ip,source.fqdn,source.reverse_dns,source.geolocation.cc"`
+* `mail_from`: As you like, for example `intelmq@localhost`
+* `mail_to`: `{ev[source.abuse_contact]}`
+* `smtp_host`: `localhost`
+* `smtp_password`: `null`
+* `smtp_port`: 25
+* `smtp_username`: `null`
+* `ssl`: `false`
+* `starttls`: `false`
+* `subject`: As you like
+* `text`: As you like
+
+</details>
 
 ## RabbitMQ
 First start the RabbitMQ server:
