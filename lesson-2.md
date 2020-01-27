@@ -33,6 +33,14 @@ ping www.google.com
 And finally, if you get lost, the VM can be reset so that you have a clear baseline to start from.
 You can either create a [snaptshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
 
+## Update
+
+Before starting with the tutorial, apply some updates to the VM:
+
+```bash
+> tutorial-update.sh
+> ./intelmq-tutorial/update-vm.sh
+```
 
 ## Familiarization - where can I find what? A short walk-through the directory structure
 
@@ -179,6 +187,7 @@ Next, check if the feodo collector indeed fetched all the data, passed it throug
 * `intelmqctl start feodo-tracker-browse-collector`
 * `intelmqctl start feodo-tracker-browse-parser`
 * `intelmqctl start deduplicator-expert`
+* `intelmqctl start taxonomy-expert`
 * `intelmqctl start url2fqdn-expert`
 * `intelmqctl start gethostbyname-1-expert`
 * `intelmqctl start gethostbyname-2-expert`
@@ -189,15 +198,33 @@ Make sure the bots are indeed running and that they fetched something from the I
 
 * `intelmqctl status`
 * `cat /opt/intelmq/var/log/*feodo*.log`
-
-TODO: sebix please verify + add a sample output
+```
+2020-01-27 12:30:54,901 - feodo-tracker-browse-collector - INFO - HTTPCollectorBot initialized with id feodo-tracker-browse-collector and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 9223.
+2020-01-27 12:30:54,903 - feodo-tracker-browse-collector - INFO - Bot is starting.
+2020-01-27 12:30:54,903 - feodo-tracker-browse-collector - INFO - Bot initialization completed.
+2020-01-27 12:30:54,904 - feodo-tracker-browse-collector - INFO - Downloading report from 'https://feodotracker.abuse.ch/browse'.
+2020-01-27 12:30:55,729 - feodo-tracker-browse-collector - INFO - Report downloaded.
+2020-01-27 12:30:55,801 - feodo-tracker-browse-collector - INFO - Idling for 86400.0s (1d) now.
+```
+```
+2020-01-27 12:31:00,989 - feodo-tracker-browse-parser - INFO - HTMLTableParserBot initialized with id feodo-tracker-browse-parser and intelmq 2.1.2.alpha.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 9265.
+2020-01-27 12:31:00,990 - feodo-tracker-browse-parser - INFO - Bot is starting.
+2020-01-27 12:31:00,990 - feodo-tracker-browse-parser - INFO - Bot initialization completed.
+2020-01-27 12:31:09,397 - feodo-tracker-browse-parser - INFO - Processed 500 messages since last logging.
+...
+2020-01-27 12:31:21,869 - feodo-tracker-browse-parser - INFO - Processed 500 messages since last logging.
+```
 
 
 And finally, we would like to take a look at its output: the output bot (which is by default the place where all events are sent to in our initial configuration) should show you the feodo events:
 
 * `cat /opt/intelmq/var/lib/bots/file-output/events.txt`
-
-TODO: sebix please add a sample output
+Output:
+```
+{"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjM3OjMzPC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0LzEyMC41MS44My44OS8iIHRhcmdldD0iX3BhcmVudCIgdGl0bGU9IkdldCBtb3JlIGluZm9ybWF0aW9uIGFib3V0IHRoaXMgYm90bmV0IEMmYW1wO0MiPjEyMC41MS44My44OTwvYT48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2UtaW5mbyI+SGVvZG8gPGEgY2xhc3M9Im1hbHBlZGlhIiBocmVmPSJodHRwczovL21hbHBlZGlhLmNhYWQuZmtpZS5mcmF1bmhvZmVyLmRlL2RldGFpbHMvd2luLmVtb3RldCIgdGFyZ2V0PSJfYmxhbmsiIHRpdGxlPSJNYWxwZWRpYTogRW1vdGV0IChha2EgR2VvZG8gYWthIEhlb2RvKSI+PC9hPjwvc3Bhbj48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2Utc3VjY2VzcyI+T2ZmbGluZTwvc3Bhbj48L3RkPjx0ZD5Ob3QgbGlzdGVkPC90ZD48dGQgY2xhc3M9InRleHQtdHJ1bmNhdGUiPkFTMjUxOSBWRUNUQU5UIEFSVEVSSUEgTmV0d29ya3MgQ29ycG9yYXRpb248L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL2pwLnBuZyIgdGl0bGU9IkpQIi8+IEpQPC90ZD48L3RyPg==", "source.allocated": "2008-03-20T00:00:00+00:00", "source.as_name": "VECTANT ARTERIA Networks Corporation, JP", "source.asn": 2519, "source.geolocation.cc": "JP", "source.ip": "120.51.83.89", "source.network": "120.51.0.0/16", "source.registry": "APNIC", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:37:33+00:00"}
+...
+{"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjMzOjM4PC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0Lzk2LjIzNC4zOC4xODYvIiB0YXJnZXQ9Il9wYXJlbnQiIHRpdGxlPSJHZXQgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGlzIGJvdG5ldCBDJmFtcDtDIj45Ni4yMzQuMzguMTg2PC9hPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1pbmZvIj5IZW9kbyA8YSBjbGFzcz0ibWFscGVkaWEiIGhyZWY9Imh0dHBzOi8vbWFscGVkaWEuY2FhZC5ma2llLmZyYXVuaG9mZXIuZGUvZGV0YWlscy93aW4uZW1vdGV0IiB0YXJnZXQ9Il9ibGFuayIgdGl0bGU9Ik1hbHBlZGlhOiBFbW90ZXQgKGFrYSBHZW9kbyBha2EgSGVvZG8pIj48L2E+PC9zcGFuPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1zdWNjZXNzIj5PZmZsaW5lPC9zcGFuPjwvdGQ+PHRkPk5vdCBsaXN0ZWQ8L3RkPjx0ZCBjbGFzcz0idGV4dC10cnVuY2F0ZSI+QVM3MDEgVVVORVQ8L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL3VzLnBuZyIgdGl0bGU9IlVTIi8+IFVTPC90ZD48L3RyPg==", "source.allocated": "2006-12-29T00:00:00+00:00", "source.as_name": "UUNET, US", "source.asn": 701, "source.geolocation.cc": "US", "source.ip": "96.234.38.186", "source.network": "96.234.0.0/17", "source.registry": "ARIN", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:33:38+00:00"}
+```
 
 
 ### If something went wrong
@@ -210,7 +237,7 @@ Also, if your data does not appear in the output file, please check the message 
 
 You can also go to the graphical interface and observe the pipeline: [http://localhost:8080/manager](http://localhost:8080/manager).
 
-TODO insert screenshot
+![IntelMQ Manager configuration tab with default setup](images/manager-configuration-default.png)
 
 
 ## Input output and filters
@@ -239,13 +266,59 @@ filter expert:
 New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md#feeds-documentation) to add it!
 
 ### Task
-Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) and start the collector and parser.
+Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains).
+
+Stop the deduplicator and then start the configured collector and parser.
 
 TODO: not to the output yet.
 
 ### Answer
 
-TODO: Copy and paste from the documentation
+Runtime configuration:
+```json
+    "bambenek-c2-domains-collector": {
+        "parameters": {
+            "extract_files": false,
+            "http_password": null,
+            "http_url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt",
+            "http_url_formatting": false,
+            "http_username": null,
+            "name": "C2 Domains",
+            "provider": "Bambenek",
+            "rate_limit": 3600,
+            "ssl_client_certificate": null
+        },
+        "name": "URL Fetcher",
+        "group": "Collector",
+        "module": "intelmq.bots.collectors.http.collector_http",
+        "description": "Generic URL Fetcher is the bot responsible to get the report from an URL.",
+        "enabled": true,
+        "run_mode": "continuous"
+    },
+    "bambenek-parser": {
+        "parameters": {},
+        "name": "Bambenek",
+        "group": "Parser",
+        "module": "intelmq.bots.parsers.bambenek.parser",
+        "description": "Bambenek parser is the bot responsible to parse and and sanitize the information from the feeds available from Bambenek.",
+        "enabled": true,
+        "run_mode": "continuous"
+    }
+```
+Pipeline configuration:
+```json
+    "bambenek-c2-domains-collector": {
+        "destination-queues": [
+            "bambenek-parser-queue"
+        ]
+    },
+    "bambenek-parser": {
+        "source-queue": "bambenek-parser-queue",
+        "destination-queues": [
+            "deduplicator-expert-queue"
+        ]
+    },
+```
 
 
 ## Experts: adding information to the stream
@@ -286,6 +359,8 @@ Intro, screenshots, text description. What can it do for you, when is it better 
 Fetch `*.csv` files from `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/` and connect it with the Shadowserver parser and this with the deduplicator.
 Save the configuration.
 Start the both newly added bots.
+
+This requires IntelMQ version 2.1.2.
 
 
 ### Answer
