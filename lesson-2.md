@@ -363,7 +363,7 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 
 ### Task
 
-Add a ASN lookup bot to your pipeline after your configured Bambenek Parser and connect it with the 
+Add a ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
 
 ### Answer
 
