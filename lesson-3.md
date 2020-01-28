@@ -31,30 +31,29 @@ These settings are not "parameters" as the other normal parameters you applied u
 
 ### Task: configure a scheduled bot
 
-Add a file collector for TODO 
+Configure the previously added file collector for for shadowserver data as scheduled bot.
 
-Configure cron to run the bot every 5 minutes.
+Start it manually to check if the bot correctly stops after the run.
 
-Start it manually to check if it correctly stop after the run.
+Configure cron to run this bot every 5 minutes. Make sure the crontab contains the following line (the provided VM has):
+```
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+```
 
-Observe in the log file that it was running.
-
-TODO
+Observe in the log file that it was running. In case of errors, cron will also send you an email.
 
 <details>
     <summary>Click to see the answer.</summary>
 
 #### Answer
 
-* `intelmqctl start TODO`
-```
-
-```
+* `intelmqctl start shadowserver-file-collector` (depending on which ID you gave your bot)
 * Run `crontab -e` and add at the end of the file:
 ```
-*/5 * * * * /usr/local/bin/intelmqctl start TODO
+*/5 * * * * /usr/local/bin/intelmqctl start shadowserver-file-collector
 ```
 </details>
+* Check the logs: `tail -f /opt/intelmq/var/log/shadowserver-file-collector.log`
 
 ## PostgreSQL DB and DB output
 

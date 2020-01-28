@@ -24,4 +24,4 @@ sudo -u intelmq git pull --rebase origin master
 popd
 sudo pip3 install -e /opt/dev_intelmq/
 
-cat /home/user/intelmq-tutorial/default-crontab | crontab -u intelmq -
+sudo crontab -u intelmq /home/user/intelmq-tutorial/default-crontab
