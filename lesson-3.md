@@ -173,6 +173,48 @@ The fourth line is invalid (bad timestamp).
 On submission, the box should say "Successfully processed 3 lines.".
 </details>
 
+## Starting bots interactively
+
+To have a look what bots actually do and for testing purposes it is often useful to start bots in foreground with detailed logging.
+This is what `intelmqctl run` is for. Details can be found in the documenation of [intelmqctl](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md#run) and with `intelmqctl run -h`. `-h` or `--help` are also available for the various subcommands.
+
+Found out how you can check what country the IP address `131.130.254.77` is in, according to the previously configured MaxMind Geolocation lookup bot.
+But do not actually insert this data to the processing pipeline of IntelMQ.
+
+Hint: The above IP address is represented in IntelMQ as `{"source.ip": "131.130.254.77"}`
+
+<details>
+    <summary>Click to see the answer.</summary>
+
+### Answer
+
+```
+intelmq@malaga:~$ intelmqctl run MaxMind-GeoIP-Expert process -m '{"source.ip": "131.130.254.77"}' -d -s
+Starting MaxMind-GeoIP-Expert...
+MaxMind-GeoIP-Expert: GeoIPExpertBot initialized with id MaxMind-GeoIP-Expert and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 22983.
+MaxMind-GeoIP-Expert: Bot is starting.
+MaxMind-GeoIP-Expert: Bot initialization completed.
+MaxMind-GeoIP-Expert:  * Message from cli will be used when processing.
+MaxMind-GeoIP-Expert:  * Dryrun only, no message will be really sent through.
+MaxMind-GeoIP-Expert: Processing...
+[
+    {
+        "source.geolocation.cc": "AT",
+        "source.geolocation.city": "Vienna",
+        "source.geolocation.latitude": 48.2006,
+        "source.geolocation.longitude": 16.3672,
+        "source.ip": "131.130.254.77"
+    }
+]
+MaxMind-GeoIP-Expert: DRYRUN: Message would be sent now to '_default'!
+MaxMind-GeoIP-Expert: DRYRUN: Message would be acknowledged now!
+```
+(your output might vary slightly).
+
+The country is Austria, actually this is the IP address of `cert.at`.
+
+</details>
+
 ## Looking up contact data from a local database
 
 `/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite` contains a table `ti` with two columns:
