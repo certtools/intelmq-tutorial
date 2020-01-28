@@ -245,6 +245,8 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
 
+In case you started these bots already previously, the data might got de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`
+
 ### Visualizing everything
 
 You can also go to the graphical interface and observe the pipeline: [http://localhost:8080/manager](http://localhost:8080/manager).
@@ -277,6 +279,10 @@ filter expert:
 * `filter_key`: `source.geolocation.cc`
 * `filter_value`: `NL`
 </details>
+
+### If something went wrong
+
+In case you started these bots already previously, the data might got de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`
 
 ## Configure a feed:
 
@@ -349,6 +355,11 @@ deduplicator-expert-queue - 807
 (Your output may slightly vary)
 </details>
 
+
+### If something went wrong
+
+In case you started these bots already previously, the data might got de-duplicated. We will cover this topic in the next task, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`
+
 ### Understand the deduplicator
 
 #### Task: See how data gets "deduplicated"
@@ -371,13 +382,18 @@ If the upstream data did not change, the parsed data is the same as before (exce
 
 #### Task: Bypass the deduplicator
 
-For testing and demo purposes it is helpful to temporarily deactivate this behavior by setting the parameter "bypass" to "true".
+For testing and demo purposes it is helpful to temporarily deactivate this behavior. Look up the documentation to find ways how this can be achieved
+
+ by setting the parameter "bypass" to "true".
 
 <details>
     <summary>Click to see the answer.</summary>
 
 ##### Answer
-To add this parameter to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
+
+* You can add the parameter `bypass` with `true`. To add it to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
+* You can delete the deduplicator's memory: `redis-cli -n 6 -c "FLUSHDB"`
+* You can adapt the `filter_keys` parameter.
 </details>
 
 ## Experts: adding information to the stream
