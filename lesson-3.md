@@ -232,13 +232,26 @@ Configure the SMTP Output so that it sends events to abuse contact as fetched by
 </details>
 
 ## RabbitMQ
+
+RabbitMQ can be used as Messaging Queue instead of Redis. How this switch can be made can be found in the [User-Guide](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md#amqp-beta)
+
 First start the RabbitMQ server:
 ```bash
 sudo systemctl start rabbitmq-server.service
 ```
-The management interface is available at port 15672, you can login with the credentials `admin`/`admin`.
+The management interface is available at port 15672, you can login with the credentials `admin`/`admin`. You will see the queues, their sizes and statistics after IntelMQ has been started.
 
-TODO: Add task
+Stop the IntelMQ botnet: `intelmqctl stop`
+
+In `/opt/intelmq/etc/defaults.conf` set these parameters:
+* `"source_pipeline_broker"` to `"amqp"`
+* `"destination_pipeline_broker"` to `"amqp"`
+* `"source_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
+* `"destination_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
+
+Now you can start the IntelMQ botnet again: `intelmqctl start`
+
+In the RabbitMQ webinterface watch the statistics of the queues.
 
 ## Interfacing with a ticket system
 
