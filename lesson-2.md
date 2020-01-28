@@ -49,7 +49,7 @@ After making sure that we can reach the VM from the host (your PC or laptop), we
 But first let us say that the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
 the documenation [here](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md) and the [Developers Guide here](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md)
 
-### The directory structure and command line  tools
+### The directory structure and command line tools
 
 IntelMQ knows multiple ways of getting installed: .deb packages, .rpm, or via pip or via git clone. Also, we distinguish between a production installation and a development installation.
 
@@ -64,10 +64,24 @@ Directory layout:
 * `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
 
+### Working on the shell
 
-#### Task: Where can I find the log files?
+IntelMQ uses it's own unprivileged user `intelmq`. Always work as this user, otherwise you might screw up some file permissions!
 
-#### Answer: `/opt/intelmq/var/log`
+To change the user, for example run:
+```bash
+sudo -iu intelmq
+```
+
+
+#### Task: Log file location
+
+Where can I find the log files?
+
+<details>
+  <summary>Click to see the answer.</summary>
+In `/opt/intelmq/var/log`
+</details>
 
 
 ### intelmqctl
@@ -95,7 +109,7 @@ The following commands will be described later:
 
 You can get help with `intelmqctl -h` or `intelmqctl --help`, also available for sub-commands. Most subcommands also have auto-completion.
 
-A complete list of  available commands can  be found in the [IntelMQctl documentation](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
+A complete list of  available commands can be found in the [intelmqctl documentation](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md)
 
 ## Default configuration
 
@@ -117,8 +131,8 @@ In the beginning of the tutorial we will work with this configuration, afterward
 
 Start the `spamhaus-drop-collector` and verify in the logs that it successfully collected the feed. Then stop the bot again.
 
-### Answer
-
+<details>
+    <summary>Click to see the answer.</summary>
 The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  `spamhaus-drop-collector`.
 
 * Here is how you start it: `intelmqctl start spamhaus-drop-collector`
@@ -138,6 +152,7 @@ The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  
 You can see that the INFO log level shows information on startup, the fetched URL and that the bots is then sleeping for one hour.
 
 * Stopping the bot: `intelmqctl stop spamhaus-drop-collector`
+</details>
 
 ### If something went wrong
 
@@ -149,20 +164,17 @@ Every bot talks with other bots via **queues**. Queues are basically message que
 
 Next, we would like to start the `spamhaus-drop-collector` again and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
 
-### Answer
-
+<details>
+    <summary>Click to see the answer.</summary>
 * `intelmqctl start spamhaus-drop-parser`
 * `intelmqctl list queues -q`   # shows all non-empty queues:
 ```
 deduplicator-expert-queue - 807
 ```
-
 (your output might vary slightly).
-
+</details>
 
 ## Simple input and output bots
-
-
 
 So far, we can start and stop bots and check in their respective log files, if they did anything. We can also check how many messages are waiting in which queue. You will need these steps over and over again, especially if something breaks. The log files are your friend! Use them :)
 
@@ -182,8 +194,8 @@ First, please look at the the `etc/pipeline.conf` and identify the path the even
 
 Next, check if the feodo collector indeed fetched all the data, passed it through the "botnet" and sent it to the file-output bot, which in turn wrote it to disk.
 
-### Answer
-
+<details>
+    <summary>Click to see the answer.</summary>
 * `intelmqctl start feodo-tracker-browse-collector`
 * `intelmqctl start feodo-tracker-browse-parser`
 * `intelmqctl start deduplicator-expert`
@@ -225,7 +237,7 @@ Output:
 ...
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjMzOjM4PC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0Lzk2LjIzNC4zOC4xODYvIiB0YXJnZXQ9Il9wYXJlbnQiIHRpdGxlPSJHZXQgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGlzIGJvdG5ldCBDJmFtcDtDIj45Ni4yMzQuMzguMTg2PC9hPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1pbmZvIj5IZW9kbyA8YSBjbGFzcz0ibWFscGVkaWEiIGhyZWY9Imh0dHBzOi8vbWFscGVkaWEuY2FhZC5ma2llLmZyYXVuaG9mZXIuZGUvZGV0YWlscy93aW4uZW1vdGV0IiB0YXJnZXQ9Il9ibGFuayIgdGl0bGU9Ik1hbHBlZGlhOiBFbW90ZXQgKGFrYSBHZW9kbyBha2EgSGVvZG8pIj48L2E+PC9zcGFuPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1zdWNjZXNzIj5PZmZsaW5lPC9zcGFuPjwvdGQ+PHRkPk5vdCBsaXN0ZWQ8L3RkPjx0ZCBjbGFzcz0idGV4dC10cnVuY2F0ZSI+QVM3MDEgVVVORVQ8L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL3VzLnBuZyIgdGl0bGU9IlVTIi8+IFVTPC90ZD48L3RyPg==", "source.allocated": "2006-12-29T00:00:00+00:00", "source.as_name": "UUNET, US", "source.asn": 701, "source.geolocation.cc": "US", "source.ip": "96.234.38.186", "source.network": "96.234.0.0/17", "source.registry": "ARIN", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:33:38+00:00"}
 ```
-
+</details>
 
 ### If something went wrong
 
@@ -249,10 +261,14 @@ Filter on the country code NL
 
 The Feodo tracker by abuse.ch provides some feeds, the [HTML "feed"](https://feodotracker.abuse.ch/browse/) provides the most information for the C&C server IP addresses including the country and the malware.
 
-Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt`.
+Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/opt/intelmq/var/lib/bots/file-output/feodo-nl.txt` by adding the filter after the parser and connecting it to a newly created file output bot.
 
-### Answer
+Then (re-)start the collector bot.
 
+<details>
+    <summary>Click to see the answer.</summary>
+
+#### Answer
 Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
 
 #### Detailed answer
@@ -260,6 +276,7 @@ Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
 filter expert:
 * `filter_key`: `source.geolocation.cc`
 * `filter_value`: `NL`
+</details>
 
 ## Configure a feed:
 
@@ -272,8 +289,10 @@ Stop the Bot `deduplicator-expert` (so we can use the data for the next tasks) a
 
 Verify the events were processed by checking the queue size of the bot `deduplicator-expert`.
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
 
+#### Answer
 Runtime configuration:
 ```json
     "bambenek-c2-domains-collector": {
@@ -328,6 +347,38 @@ Pipeline configuration:
 deduplicator-expert-queue - 807
 ```
 (Your output may slightly vary)
+</details>
+
+### Understand the deduplicator
+
+#### Task: See how data gets "deduplicated"
+
+Restart a collector which was already running. The file output should not get any new data. Why is this the case and how can you prevent it?
+
+<details>
+    <summary>Click to see the answer.</summary>
+
+##### Answer
+The deduplicator is configurable. The default works as following:
+* Ignores the fields "time.observation" and "raw"
+* Hashes the remaining data
+* Checks if this hash is already in it's cache
+  * If yes, the event is ignored
+  * If no, the hash is inserted into the cache with a TTL of one day. The event is forwarded to the next bot.
+
+If the upstream data did not change, the parsed data is the same as before (except for the "time.observation" field).
+</details>
+
+#### Task: Bypass the deduplicator
+
+For testing and demo purposes it is helpful to temporarily deactivate this behavior by setting the parameter "bypass" to "true".
+
+<details>
+    <summary>Click to see the answer.</summary>
+
+##### Answer
+To add this parameter to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
+</details>
 
 ## Experts: adding information to the stream
 
@@ -341,8 +392,10 @@ The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains t
 Add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
 Start all needed bots to see the data in the file.
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
 
+#### Answer
 The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 * `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
@@ -356,6 +409,7 @@ The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "event_description.text": "Domain used by virut", "event_description.url": "http://osint.bambenekconsulting.com/manual/virut.txt", "feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "malware.name": "virut", "raw": "d296dXVwLmNvbSxEb21haW4gdXNlZCBieSB2aXJ1dCwyMDIwLTAxLTI3IDEyOjExLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC92aXJ1dC50eHQ=", "source.fqdn": "wozuup.com", "source.geolocation.cc": "US", "source.geolocation.city": "San Francisco", "source.geolocation.latitude": 37.7506, "source.geolocation.longitude": -122.4121, "source.ip": "192.0.78.12", "status": "online", "time.observation": "2020-01-27T12:37:55+00:00", "time.source": "2020-01-27T12:11:00+00:00"}
 ```
 As you can see, the data contains several `source.geolocation.*` fields including the country, city and coordinates.
+</details>
 
 ## Experts: add IP 2 ASN enrichment
 
@@ -363,12 +417,17 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 
 ### Task
 
-Add a ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
+Add an ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
 
-### Answer
+<details>
+    <summary>Click to see the answer.</summary>
 
+#### Answer
 The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
+
+![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
+</details>
 
 ## The IntelMQ manager
 
@@ -382,9 +441,10 @@ Start the both newly added bots.
 
 This requires IntelMQ version 2.1.2.
 
+<details>
+    <summary>Click to see the answer.</summary>
 
-### Answer
-
+#### Answer
 Parameters for the "File" collector:
 * `delete_file`: `false`
 * `path`: `/opt/dev_intelmq/intelmq/tests/bots/parsers/shadowserver/testdata/`
@@ -394,6 +454,7 @@ Parameters for the "File" collector:
 Parameters for the "ShadowServer" parser:
 * `feedname`: not needed, the exact feed will be determined from the file name
 * `overwrite`: `true`: this will set the `feed.name` field properly
+</details>
 
 # Recap
 
