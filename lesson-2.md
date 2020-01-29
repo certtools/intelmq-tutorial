@@ -80,7 +80,8 @@ Where can I find the log files?
 
 <details>
   <summary>Click to see the answer.</summary>
-In `/opt/intelmq/var/log`
+
+In `/opt/intelmq/var/log`.
 </details>
 
 
@@ -133,6 +134,7 @@ Start the `spamhaus-drop-collector` and verify in the logs that it successfully 
 
 <details>
     <summary>Click to see the answer.</summary>
+
 The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  `spamhaus-drop-collector`.
 
 * Here is how you start it: `intelmqctl start spamhaus-drop-collector`
@@ -166,6 +168,7 @@ Next, we would like to start the `spamhaus-drop-collector` again and look up how
 
 <details>
     <summary>Click to see the answer.</summary>
+
 * `intelmqctl start spamhaus-drop-parser`
 * `intelmqctl list queues -q`   # shows all non-empty queues:
 ```
@@ -196,6 +199,7 @@ Next, check if the feodo collector indeed fetched all the data, passed it throug
 
 <details>
     <summary>Click to see the answer.</summary>
+
 * `intelmqctl start feodo-tracker-browse-collector`
 * `intelmqctl start feodo-tracker-browse-parser`
 * `intelmqctl start deduplicator-expert`

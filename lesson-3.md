@@ -52,8 +52,8 @@ Observe in the log file that it was running. In case of errors, cron will also s
 ```
 */5 * * * * /usr/local/bin/intelmqctl start shadowserver-file-collector
 ```
-</details>
 * Check the logs: `tail -f /opt/intelmq/var/log/shadowserver-file-collector.log`
+</details>
 
 ## PostgreSQL DB and DB output
 
