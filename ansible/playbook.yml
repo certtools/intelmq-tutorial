@@ -124,6 +124,8 @@
        dest: /opt/intelmq/var/lib/state.json
        owner: intelmq
        group: intelmq
+   - name: provide default crontab
+     command: sudo crontab -u intelmq /home/user/intelmq-tutorial/default-crontab
    # INTELMQ OPTIONAL DEPENDENCIES
    - name: Install pyasn
      pip:

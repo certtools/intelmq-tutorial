@@ -31,30 +31,29 @@ These settings are not "parameters" as the other normal parameters you applied u
 
 ### Task: configure a scheduled bot
 
-Add a file collector for TODO 
+Configure the previously added file collector for for shadowserver data as scheduled bot.
 
-Configure cron to run the bot every 5 minutes.
+Start it manually to check if the bot correctly stops after the run.
 
-Start it manually to check if it correctly stop after the run.
+Configure cron to run this bot every 5 minutes. Make sure the crontab contains the following line (the provided VM has):
+```
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+```
 
-Observe in the log file that it was running.
-
-TODO
+Observe in the log file that it was running. In case of errors, cron will also send you an email.
 
 <details>
     <summary>Click to see the answer.</summary>
 
 #### Answer
 
-* `intelmqctl start TODO`
-```
-
-```
+* `intelmqctl start shadowserver-file-collector` (depending on which ID you gave your bot)
 * Run `crontab -e` and add at the end of the file:
 ```
-*/5 * * * * /usr/local/bin/intelmqctl start TODO
+*/5 * * * * /usr/local/bin/intelmqctl start shadowserver-file-collector
 ```
 </details>
+* Check the logs: `tail -f /opt/intelmq/var/log/shadowserver-file-collector.log`
 
 ## PostgreSQL DB and DB output
 
@@ -174,6 +173,48 @@ The fourth line is invalid (bad timestamp).
 On submission, the box should say "Successfully processed 3 lines.".
 </details>
 
+## Starting bots interactively
+
+To have a look what bots actually do and for testing purposes it is often useful to start bots in foreground with detailed logging.
+This is what `intelmqctl run` is for. Details can be found in the documenation of [intelmqctl](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md#run) and with `intelmqctl run -h`. `-h` or `--help` are also available for the various subcommands.
+
+Found out how you can check what country the IP address `131.130.254.77` is in, according to the previously configured MaxMind Geolocation lookup bot.
+But do not actually insert this data to the processing pipeline of IntelMQ.
+
+Hint: The above IP address is represented in IntelMQ as `{"source.ip": "131.130.254.77"}`
+
+<details>
+    <summary>Click to see the answer.</summary>
+
+### Answer
+
+```
+intelmq@malaga:~$ intelmqctl run MaxMind-GeoIP-Expert process -m '{"source.ip": "131.130.254.77"}' -d -s
+Starting MaxMind-GeoIP-Expert...
+MaxMind-GeoIP-Expert: GeoIPExpertBot initialized with id MaxMind-GeoIP-Expert and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 22983.
+MaxMind-GeoIP-Expert: Bot is starting.
+MaxMind-GeoIP-Expert: Bot initialization completed.
+MaxMind-GeoIP-Expert:  * Message from cli will be used when processing.
+MaxMind-GeoIP-Expert:  * Dryrun only, no message will be really sent through.
+MaxMind-GeoIP-Expert: Processing...
+[
+    {
+        "source.geolocation.cc": "AT",
+        "source.geolocation.city": "Vienna",
+        "source.geolocation.latitude": 48.2006,
+        "source.geolocation.longitude": 16.3672,
+        "source.ip": "131.130.254.77"
+    }
+]
+MaxMind-GeoIP-Expert: DRYRUN: Message would be sent now to '_default'!
+MaxMind-GeoIP-Expert: DRYRUN: Message would be acknowledged now!
+```
+(your output might vary slightly).
+
+The country is Austria, actually this is the IP address of `cert.at`.
+
+</details>
+
 ## Looking up contact data from a local database
 
 `/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite` contains a table `ti` with two columns:
@@ -233,13 +274,26 @@ Configure the SMTP Output so that it sends events to abuse contact as fetched by
 </details>
 
 ## RabbitMQ
+
+RabbitMQ can be used as Messaging Queue instead of Redis. How this switch can be made can be found in the [User-Guide](https://github.com/certtools/intelmq/blob/master/docs/User-Guide.md#amqp-beta)
+
 First start the RabbitMQ server:
 ```bash
 sudo systemctl start rabbitmq-server.service
 ```
-The management interface is available at port 15672, you can login with the credentials `admin`/`admin`.
+The management interface is available at port 15672, you can login with the credentials `admin`/`admin`. You will see the queues, their sizes and statistics after IntelMQ has been started.
 
-TODO: Add task
+Stop the IntelMQ botnet: `intelmqctl stop`
+
+In `/opt/intelmq/etc/defaults.conf` set these parameters:
+* `"source_pipeline_broker"` to `"amqp"`
+* `"destination_pipeline_broker"` to `"amqp"`
+* `"source_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
+* `"destination_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
+
+Now you can start the IntelMQ botnet again: `intelmqctl start`
+
+In the RabbitMQ webinterface watch the statistics of the queues.
 
 ## Interfacing with a ticket system
 
