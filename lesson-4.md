@@ -1,12 +1,17 @@
-# Lesson 4: Custom BOTS
-
-How to develop new bots for intelMQ is descrubed [here](https://intelmq.readthedocs.io/en/latest/Developers-Guide/#bot-developer-guide)
+# Lesson 4: Advanced topics for IntelMQ developers - custom BOTS
 
 
-The installation of these 'custom' bots can be troublesome as one must modify and add several files. The evolution of these bots can involve adding or removing parameters.
+How to develop new bots for intelMQ is described [here](https://intelmq.readthedocs.io/en/latest/Developers-Guide/#bot-developer-guide)
+
+## Motivation
+
+
+However, the installation of these custom bots can be troublesome as one must modify and add several config files. Whenever bots get changes, the evolution of these bots can mean further adding or removing additional parameters.
 In such cases the configurations needs be adapted, or the bot may not run. 
 
-The repository [IntelMQ Tools](https://github.com/jhemp/intelmq-tools) provides a samll tool set to verify and update configurations and also to add or remove such custom bots.
+To ease this effort, the tools residing in the repository [IntelMQ Tools](https://github.com/jhemp/intelmq-tools) provide functionality to verify and update configurations and also to add or remove such custom bots.
+
+In short: they make your life easier as an IntelMQ bot developer.
 
 # Installation
 
@@ -37,6 +42,8 @@ intelMQLocation=/lib/python3.6/site-packages/intelmq/bots
 entryPointsLocation=/lib/python3.6/site-packages/intelmq-2.1.1-py3.6.egg-info/entry_points.txt
 binFolder=/usr/bin
 ```
+(note that your python path might be different, please adjust accordingly).
+
 
 # Tools
 
@@ -44,6 +51,7 @@ The tool provides several subtools. The follwing sections will describe them.
 
 ##  Details of IntelMQ
 
+The `-d` flat shows details of the installation.
 
 ```bash
 ~/intelmq-tools $ ./intelmq_tools.py -d
@@ -57,7 +65,7 @@ runtime.conf location:          /opt/intelmq/etc/runtime.conf
 Custom IntelMQ Bots location    /bots
 ```
 
-##  List Bots
+##  List Bots (`list` command)
 
 
 ```bash
@@ -180,6 +188,7 @@ The tool offers the feature to install and uninstall custom bots with ease. The 
 
 Tool for installing bots
 
+```bash
 optional arguments:
   --verbose, -v
   -f, --full            display full
@@ -191,10 +200,11 @@ optional arguments:
                         Path of the bot to uninstall (Note: Module Folder
                         only)
   --version             show program's version number and exit
+```
 
+### Task: Installing a Bot
 
-### Task: Install a Bot
-To install a bot one needs only to specify it's main file.
+To install a bot one needs only to specify its main file.
 
 ```bash
 ~/intelmq-tools $  ./intelmq_tools.py install --dev -i bots/parsers/exampleparser/parser.py 
