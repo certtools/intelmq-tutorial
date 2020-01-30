@@ -31,7 +31,7 @@ We **highly** recommend, to ssh into the VM from your favorite terminal program,
 ssh -p 22222 user@localhost
 ```
 
-![ssh-into-the-VM](images/terminal-ssh-in.png | size=800)
+![ssh-into-the-VM](images/terminal-ssh-in.png)
 
 This allows you to follow the tutorial with copy & pasting the answers (in case you get lost). The shell window in the VM itself does not support copy & pasting. Meaning, you will have to type long commands.
 
