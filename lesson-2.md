@@ -23,6 +23,17 @@ You should see a small website like:
 
 ![VM landing page](images/vm-landing-page.png)
 
+**IMPORTANT**: *copy & paste support*
+
+We **highly** recommend, to ssh into the VM from your favorite terminal program, like so:
+```bash
+
+ssh -p 22222 user@localhost
+```
+
+This allows you to follow the tutorial with copy & pasting the answers (in case you get lost). The shell window in the VM itself does not support copy & pasting. Meaning, you will have to type long commands.
+
+**Network connectivity**
 Next, we need to make sure, that the VM can download data from the Internet.
 Please execute a `ping 8.8.8.8` or similar and make sure that DNS resolving works:
 
