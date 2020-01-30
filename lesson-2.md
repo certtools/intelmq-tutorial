@@ -23,7 +23,7 @@ You should see a small website like:
 
 ![VM landing page](images/vm-landing-page.png)
 
-**IMPORTANT**: *copy & paste support*
+### **IMPORTANT**: *copy & paste support*
 
 We **highly** recommend, to ssh into the VM from your favorite terminal program, like so:
 ```bash
@@ -35,7 +35,7 @@ ssh -p 22222 user@localhost
 
 This allows you to follow the tutorial with copy & pasting the answers (in case you get lost). The shell window in the VM itself does not support copy & pasting. Meaning, you will have to type long commands.
 
-**Network connectivity**
+### **Network connectivity**
 Next, we need to make sure, that the VM can download data from the Internet.
 Please execute a `ping 8.8.8.8` or similar and make sure that DNS resolving works:
 
@@ -46,13 +46,22 @@ ping www.google.com
 And finally, if you get lost, the VM can be reset so that you have a clear baseline to start from.
 You can either create a [snaptshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
 
-## Update
+### Updateing to the latest tutorial
 
 Before starting with the tutorial, apply some updates to the VM:
 
 ```bash
 > tutorial-update.sh
 > ./intelmq-tutorial/update-vm.sh
+```
+
+### Working on the shell
+
+IntelMQ uses it's own unprivileged user `intelmq`. Always work as this user, otherwise you might screw up some file permissions!
+
+To change the user, for example run:
+```bash
+sudo -iu intelmq
 ```
 
 ## Familiarization - where can I find what? A short walk-through the directory structure
@@ -76,15 +85,6 @@ Directory layout:
 * `/opt/intelmq/var/lib/bots/`: For example configuration files of certain bots, local lookup data and output files.
 * `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/`: The internal PID-files.
-
-### Working on the shell
-
-IntelMQ uses it's own unprivileged user `intelmq`. Always work as this user, otherwise you might screw up some file permissions!
-
-To change the user, for example run:
-```bash
-sudo -iu intelmq
-```
 
 
 #### Task: Log file location
