@@ -223,20 +223,24 @@ Next, check if the feodo collector indeed fetched all the data, passed it throug
 <details>
     <summary>Click to see the answer.</summary>
 
-* `intelmqctl start feodo-tracker-browse-collector`
-* `intelmqctl start feodo-tracker-browse-parser`
-* `intelmqctl start deduplicator-expert`
-* `intelmqctl start taxonomy-expert`
-* `intelmqctl start url2fqdn-expert`
-* `intelmqctl start gethostbyname-1-expert`
-* `intelmqctl start gethostbyname-2-expert`
-* `intelmqctl start cymru-whois-expert`
-* `intelmqctl start file-output`
+* ```bash
+intelmqctl start feodo-tracker-browse-collector
+intelmqctl start feodo-tracker-browse-parser
+intelmqctl start deduplicator-expert
+intelmqctl start taxonomy-expert
+intelmqctl start url2fqdn-expert
+intelmqctl start gethostbyname-1-expert
+intelmqctl start gethostbyname-2-expert
+intelmqctl start cymru-whois-expert
+intelmqctl start file-output
+```
 
 Make sure the bots are indeed running and that they fetched something from the Internet and parsed it:
 
-* `intelmqctl status`
-* `cat /opt/intelmq/var/log/*feodo*.log`
+* ```intelmqctl status
+cat /opt/intelmq/var/log/*feodo*.log```
+
+Output (your output might vary):
 ```
 2020-01-27 12:30:54,901 - feodo-tracker-browse-collector - INFO - HTTPCollectorBot initialized with id feodo-tracker-browse-collector and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 9223.
 2020-01-27 12:30:54,903 - feodo-tracker-browse-collector - INFO - Bot is starting.
@@ -258,6 +262,7 @@ Make sure the bots are indeed running and that they fetched something from the I
 And finally, we would like to take a look at its output: the output bot (which is by default the place where all events are sent to in our initial configuration) should show you the feodo events:
 
 * `cat /opt/intelmq/var/lib/bots/file-output/events.txt`
+
 Output:
 ```
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjM3OjMzPC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0LzEyMC41MS44My44OS8iIHRhcmdldD0iX3BhcmVudCIgdGl0bGU9IkdldCBtb3JlIGluZm9ybWF0aW9uIGFib3V0IHRoaXMgYm90bmV0IEMmYW1wO0MiPjEyMC41MS44My44OTwvYT48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2UtaW5mbyI+SGVvZG8gPGEgY2xhc3M9Im1hbHBlZGlhIiBocmVmPSJodHRwczovL21hbHBlZGlhLmNhYWQuZmtpZS5mcmF1bmhvZmVyLmRlL2RldGFpbHMvd2luLmVtb3RldCIgdGFyZ2V0PSJfYmxhbmsiIHRpdGxlPSJNYWxwZWRpYTogRW1vdGV0IChha2EgR2VvZG8gYWthIEhlb2RvKSI+PC9hPjwvc3Bhbj48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2Utc3VjY2VzcyI+T2ZmbGluZTwvc3Bhbj48L3RkPjx0ZD5Ob3QgbGlzdGVkPC90ZD48dGQgY2xhc3M9InRleHQtdHJ1bmNhdGUiPkFTMjUxOSBWRUNUQU5UIEFSVEVSSUEgTmV0d29ya3MgQ29ycG9yYXRpb248L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL2pwLnBuZyIgdGl0bGU9IkpQIi8+IEpQPC90ZD48L3RyPg==", "source.allocated": "2008-03-20T00:00:00+00:00", "source.as_name": "VECTANT ARTERIA Networks Corporation, JP", "source.asn": 2519, "source.geolocation.cc": "JP", "source.ip": "120.51.83.89", "source.network": "120.51.0.0/16", "source.registry": "APNIC", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:37:33+00:00"}
