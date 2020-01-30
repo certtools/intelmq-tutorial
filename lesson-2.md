@@ -312,6 +312,12 @@ Create a "Filter" expert and filter for `"source.geolocation.cc"` = `"NL"`.
 filter expert:
 * `filter_key`: `source.geolocation.cc`
 * `filter_value`: `NL`
+
+#### Graphical representation
+
+If you configured everything as requested, the pipeline should look something like this:
+![lesson-2-filter-nl](images/lesson-2-feodo-filter-nl.png)
+
 </details>
 
 ### If something went wrong
