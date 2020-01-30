@@ -279,7 +279,7 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
 
-In case you started these bots already previously, the data might got de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`
+In case you started these bots already previously, the data might have gotten de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"` (note: this command flushes the deduper's cache) and then execute the commands again.
 
 ### Visualizing everything
 
