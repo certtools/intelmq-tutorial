@@ -186,16 +186,15 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Every bot talks with other bots via **queues**. Queues are basically message queues in a MQ system (by default, IntelMQ uses Redis as MQ system). Messages are basically log lines which should get processed.
 
-Next, we would like to start the `spamhaus-drop-collector` again (and its next bot, the `spamhaus-drop-parser`) and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
+Next, we would like to start the `spamhaus-drop-parser` and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
 
 <details>
     <summary>Click to see the answer.</summary>
 
-* `intelmqctl start spamhaus-drop-collector`
 * `intelmqctl start spamhaus-drop-parser`
 * `intelmqctl list queues -q`   # shows all non-empty queues:
 ```
-deduplicator-expert-queue - 807
+deduplicator-expert-queue - 824
 ```
 (your output might vary slightly).
 </details>
@@ -207,9 +206,9 @@ So far, we can start and stop bots and check in their respective log files, if t
 Next, we will collect real abuse.ch data from the internet, parse it and send the output to a file.
 
 
-### Task: connect the abuse.ch_feodo collector bot with a file output bot and look at the output
+### Task: Emit data with a file output bot and look at the output
 
-Our default configuration has a number of bots which need to get started in order to have a full pipeline path between the abuse.ch_feodo collector and the file output bot. You can see the pipeline which is configured by default in two ways:
+Our default configuration has a number of bots which need to get started in order to have a full pipeline path between the Abuse.ch Feodo collector and the file output bot. You can see the pipeline which is configured by default in two ways:
 
   1. via the `etc/pipeline.conf` file
   2. via the IntelMQ manager. 
@@ -263,10 +262,10 @@ Output (your output might vary):
 
 And finally, we would like to take a look at its output: the output bot (which is by default the place where all events are sent to in our initial configuration) should show you the feodo events:
 
-* `cat /opt/intelmq/var/lib/bots/file-output/events.txt`
+* `less /opt/intelmq/var/lib/bots/file-output/events.txt`
 
 Output:
-```
+```json
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjM3OjMzPC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0LzEyMC41MS44My44OS8iIHRhcmdldD0iX3BhcmVudCIgdGl0bGU9IkdldCBtb3JlIGluZm9ybWF0aW9uIGFib3V0IHRoaXMgYm90bmV0IEMmYW1wO0MiPjEyMC41MS44My44OTwvYT48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2UtaW5mbyI+SGVvZG8gPGEgY2xhc3M9Im1hbHBlZGlhIiBocmVmPSJodHRwczovL21hbHBlZGlhLmNhYWQuZmtpZS5mcmF1bmhvZmVyLmRlL2RldGFpbHMvd2luLmVtb3RldCIgdGFyZ2V0PSJfYmxhbmsiIHRpdGxlPSJNYWxwZWRpYTogRW1vdGV0IChha2EgR2VvZG8gYWthIEhlb2RvKSI+PC9hPjwvc3Bhbj48L3RkPjx0ZD48c3BhbiBjbGFzcz0iYmFkZ2UgYmFkZ2Utc3VjY2VzcyI+T2ZmbGluZTwvc3Bhbj48L3RkPjx0ZD5Ob3QgbGlzdGVkPC90ZD48dGQgY2xhc3M9InRleHQtdHJ1bmNhdGUiPkFTMjUxOSBWRUNUQU5UIEFSVEVSSUEgTmV0d29ya3MgQ29ycG9yYXRpb248L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL2pwLnBuZyIgdGl0bGU9IkpQIi8+IEpQPC90ZD48L3RyPg==", "source.allocated": "2008-03-20T00:00:00+00:00", "source.as_name": "VECTANT ARTERIA Networks Corporation, JP", "source.asn": 2519, "source.geolocation.cc": "JP", "source.ip": "120.51.83.89", "source.network": "120.51.0.0/16", "source.registry": "APNIC", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:37:33+00:00"}
 ...
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "feed.accuracy": 100.0, "feed.name": "Feodo Tracker Browse", "feed.provider": "Abuse.ch", "feed.url": "https://feodotracker.abuse.ch/browse", "malware.name": "heodo", "raw": "PHRyPjx0ZD4yMDE5LTEyLTEyIDAzOjMzOjM4PC90ZD48dGQ+PGEgaHJlZj0iL2Jyb3dzZS9ob3N0Lzk2LjIzNC4zOC4xODYvIiB0YXJnZXQ9Il9wYXJlbnQiIHRpdGxlPSJHZXQgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGlzIGJvdG5ldCBDJmFtcDtDIj45Ni4yMzQuMzguMTg2PC9hPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1pbmZvIj5IZW9kbyA8YSBjbGFzcz0ibWFscGVkaWEiIGhyZWY9Imh0dHBzOi8vbWFscGVkaWEuY2FhZC5ma2llLmZyYXVuaG9mZXIuZGUvZGV0YWlscy93aW4uZW1vdGV0IiB0YXJnZXQ9Il9ibGFuayIgdGl0bGU9Ik1hbHBlZGlhOiBFbW90ZXQgKGFrYSBHZW9kbyBha2EgSGVvZG8pIj48L2E+PC9zcGFuPjwvdGQ+PHRkPjxzcGFuIGNsYXNzPSJiYWRnZSBiYWRnZS1zdWNjZXNzIj5PZmZsaW5lPC9zcGFuPjwvdGQ+PHRkPk5vdCBsaXN0ZWQ8L3RkPjx0ZCBjbGFzcz0idGV4dC10cnVuY2F0ZSI+QVM3MDEgVVVORVQ8L3RkPjx0ZD48aW1nIGFsdD0iLSIgc3JjPSIvaW1hZ2VzL2ZsYWdzL3VzLnBuZyIgdGl0bGU9IlVTIi8+IFVTPC90ZD48L3RyPg==", "source.allocated": "2006-12-29T00:00:00+00:00", "source.as_name": "UUNET, US", "source.asn": 701, "source.geolocation.cc": "US", "source.ip": "96.234.38.186", "source.network": "96.234.0.0/17", "source.registry": "ARIN", "status": "Offline", "time.observation": "2020-01-27T11:30:55+00:00", "time.source": "2019-12-12T02:33:38+00:00"}
@@ -279,7 +278,7 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
 
-In case you started these bots already previously, the data might have gotten de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"` (note: this command flushes the deduper's cache) and then execute the commands again.
+In case you started these bots already previously, the data might have gotten de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"` to flush the deduplicator's cache and then restart the collectors.
 
 ### Visualizing everything
 
@@ -317,7 +316,7 @@ filter expert:
 
 If you configured everything as requested, the pipeline should look something like this:
 
-![Pipeline feodo-tracker-browse-collector -> feodo-tracker-browse-paser -> Filter-Expert -> FileOutput2](images/lesson-2-feodo-filter-nl.png)
+![Pipeline feodo-tracker-browse-collector -> feodo-tracker-browse-parser -> Filter-Expert -> FileOutput2](images/lesson-2-feodo-filter-nl.png)
 
 And the configuration of the newly added filter expert:
 
@@ -340,9 +339,9 @@ New feeds can be configured by adding a collector and the matching parser. The [
 ### Task
 Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains).
 
-Stop the Bot `deduplicator-expert` (so we can use the data for the next tasks) and then start the configured collector and parser.
+Start the configured collector and parser.
 
-Verify the events were processed by checking the queue size of the bot `deduplicator-expert`.
+Verify the events were processed by checking the output file `/opt/intelmq/var/lib/bots/file-output/events.txt`.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -394,13 +393,15 @@ Pipeline configuration:
     },
 ```
 
-* `intelmqctl stop deduplicator-expert`
 * `intelmqctl start bambenek-c2-domains-collector` (depending on which ID you gave your new bot)
 * `intelmqctl start bambenek-parser` (depending on which ID you gave your new bot)
-* `intelmqctl list queues -q`
+* `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
+```json
+...
+{"feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "time.observation": "2020-01-30T11:55:54+00:00", "event_description.text": "Domain used by banjori", "event_description.url": "http://osint.bambenekconsulting.com/manual/banjori.txt", "raw": "bHR5ZW1lbi5jb20sRG9tYWluIHVzZWQgYnkgYmFuam9yaSwyMDIwLTAxLTMwIDExOjAzLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC9iYW5qb3JpLnR4dA==", "malware.name": "banjori", "source.fqdn": "ltyemen.com", "time.source": "2020-01-30T11:03:00+00:00", "classification.type": "c2server", "status": "online", "classification.taxonomy": "malicious code", "source.ip": "198.38.83.24", "source.asn": 23352, "source.network": "198.38.83.0/24", "source.geolocation.cc": "US", "source.registry": "ARIN", "source.allocated": "2012-04-20T00:00:00+00:00", "source.as_name": "SERVERCENTRAL, US"}
 ```
-deduplicator-expert-queue - 807
-```
+As you can see, the data is from the Bambenek C2 Domains feed.
+
 (Your output may slightly vary)
 </details>
 
@@ -431,9 +432,7 @@ If the upstream data did not change, the parsed data is the same as before (exce
 
 #### Task: Bypass the deduplicator
 
-For testing and demo purposes it is helpful to temporarily deactivate this behavior. Look up the documentation to find ways how this can be achieved
-
- by setting the parameter "bypass" to "true".
+For testing and demo purposes it is helpful to temporarily deactivate this behavior. Look up the documentation to find ways how this can be achieved and apply the change.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -441,8 +440,9 @@ For testing and demo purposes it is helpful to temporarily deactivate this behav
 ##### Answer
 
 * You can add the parameter `bypass` with `true`. To add it to the runtime configuration in the manager, you need to first click the orange "plus"-sign button in the bot's configuration view to add a new parameter field.
-* You can delete the deduplicator's memory: `redis-cli -n 6 -c "FLUSHDB"`
+  ![Configuration of the deduplicator expert with active bypass](images/lesson-2-deduplicator-bypass.png)
 * You can adapt the `filter_keys` parameter.
+* You can delete the deduplicator's memory: `redis-cli -n 6 -c "FLUSHDB"` (not permanent of course, has only temporary effect)
 </details>
 
 ## Experts: adding information to the stream
@@ -455,7 +455,7 @@ Geolocation information is crucial to determine how to act on received data.
 The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database for fast local lookups.
 
 Add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
-Start all needed bots to see the data in the file.
+(Re-)Start any collector containing IP addresses of FQDNs (e.g. the Bambenek feed) and start all needed bots to see the data in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -466,10 +466,11 @@ The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
 
 ![Screenshot of the pipeline setup](images/lesson-2-geoip.png)
 
-* `intelmqctl start deduplicator-expert`
+If you added the new bot manually in the configuration files, reload the gethostbyname experts so they pick up the new destination bot/queue.
+
 * `intelmqctl start maxmind-geoip-expert` (depending on which ID you gave your new bot)
 * `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
-```
+```json
 ...
 {"classification.taxonomy": "malicious code", "classification.type": "c2server", "event_description.text": "Domain used by virut", "event_description.url": "http://osint.bambenekconsulting.com/manual/virut.txt", "feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "malware.name": "virut", "raw": "d296dXVwLmNvbSxEb21haW4gdXNlZCBieSB2aXJ1dCwyMDIwLTAxLTI3IDEyOjExLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC92aXJ1dC50eHQ=", "source.fqdn": "wozuup.com", "source.geolocation.cc": "US", "source.geolocation.city": "San Francisco", "source.geolocation.latitude": 37.7506, "source.geolocation.longitude": -122.4121, "source.ip": "192.0.78.12", "status": "online", "time.observation": "2020-01-27T12:37:55+00:00", "time.source": "2020-01-27T12:11:00+00:00"}
 ```
@@ -490,8 +491,14 @@ Add an ASN lookup bot to your pipeline between your configured Geolocation Exper
 #### Answer
 The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
-
-![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
+* Screenshot:
+  ![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
+* Check the output file: `tail /opt/intelmq/var/lib/bots/file-output/events.txt`:
+```json
+...
+{"feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "time.observation": "2020-01-30T15:30:24+00:00", "event_description.text": "Domain used by pykspa", "event_description.url": "http://osint.bambenekconsulting.com/manual/pykspa.txt", "raw": "bWVndWlhLm5ldCxEb21haW4gdXNlZCBieSBweWtzcGEsMjAyMC0wMS0zMCAxNTowNyxodHRwOi8vb3NpbnQuYmFtYmVuZWtjb25zdWx0aW5nLmNvbS9tYW51YWwvcHlrc3BhLnR4dA==", "malware.name": "pykspa", "source.fqdn": "meguia.net", "time.source": "2020-01-30T15:07:00+00:00", "classification.type": "c2server", "status": "online", "classification.taxonomy": "malicious code", "source.ip": "189.50.110.40", "source.geolocation.cc": "BR", "source.geolocation.latitude": -22.4929, "source.geolocation.longitude": -48.7109, "source.geolocation.city": "Macatuba", "source.asn": 28668, "source.network": "189.50.104.0/21"}
+```
+As you can see, the data contains the `source.asn` field with the value 28668 in this case.
 </details>
 
 ## The IntelMQ manager
