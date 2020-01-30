@@ -20,8 +20,9 @@ sudo chmod +x /usr/local/bin/update-vm.sh
 
 # update intelmq
 pushd /opt/dev_intelmq/
+sudo -u intelmq git checkout master
 sudo -u intelmq git pull --rebase origin master
 popd
 sudo pip3 install -e /opt/dev_intelmq/
 
-sudo crontab -u intelmq /home/user/intelmq-tutorial/default-crontab
+sudo crontab -u intelmq /home/user/intelmq-tutorial/ansible/files/default_crontab

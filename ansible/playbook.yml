@@ -125,7 +125,12 @@
        owner: intelmq
        group: intelmq
    - name: provide default crontab
-     command: sudo crontab -u intelmq /home/user/intelmq-tutorial/default-crontab
+     copy:
+       src: default_crontab
+       dest: /tmp/
+   - name: install default crontab
+     command: crontab -u intelmq /tmp/default_crontab
+     become: True
    # INTELMQ OPTIONAL DEPENDENCIES
    - name: Install pyasn
      pip:
@@ -133,8 +138,9 @@
        executable: pip3
      become: True
    - name: Provide local lookup database for IP address to ASN
-     command: bash -c "pushd /tmp/ && pyasn_util_download.py --latestv46 && pyasn_util_convert.py --single rib.* /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat; popd"
+     shell: pyasn_util_download.py --latestv46 && pyasn_util_convert.py --single rib.* /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
      args:
+       chdir: /tmp/
        creates:
          /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
      become_user: intelmq
@@ -297,11 +303,11 @@
        src: enabled_plugins
        dest: /etc/rabbitmq/
    - name: create RabbitMQ admin user
-     command: bash -c "rabbitmqctl list_users | egrep ^admin || sudo rabbitmqctl add_user admin admin"
+     shell: rabbitmqctl list_users | egrep ^admin || sudo rabbitmqctl add_user admin admin
    - name: make RabbitMQ admin user an administrator
      command: rabbitmqctl set_user_tags admin administrator management
    - name: create RabbitMQ intelmq user
-     command: bash -c "rabbitmqctl list_users | egrep ^intelmq || sudo rabbitmqctl add_user intelmq intelmq"
+     shell: rabbitmqctl list_users | egrep ^intelmq || sudo rabbitmqctl add_user intelmq intelmq
    - name: configure RabbitMQ intelmq user
      command: rabbitmqctl set_user_tags intelmq montoring
    - name: allow intelmq user access to vhost /
