@@ -94,7 +94,16 @@ Where can I find the log files?
 <details>
   <summary>Click to see the answer.</summary>
 
-In `/opt/intelmq/var/log`.
+You can find all log files in `/opt/intelmq/var/log`. Initially, it should look something like this (because we did not start anything yet):
+
+```bash
+intelmq@malaga:~$ ls -al /opt/intelmq/var/log
+total 8
+drwxr-xr-x 2 intelmq intelmq 4096 Jan 30 07:07 .
+drwxr-xr-x 5 intelmq intelmq 4096 Jan 23 17:09 ..
+-rw-r--r-- 1 intelmq intelmq    0 Jan 30 07:07 intelmqctl.log
+```
+
 </details>
 
 
