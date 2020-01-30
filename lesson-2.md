@@ -316,7 +316,12 @@ filter expert:
 #### Graphical representation
 
 If you configured everything as requested, the pipeline should look something like this:
-![lesson-2-filter-nl](images/lesson-2-feodo-filter-nl.png)
+
+![Pipeline feodo-tracker-browse-collector -> feodo-tracker-browse-paser -> Filter-Expert -> FileOutput2](images/lesson-2-feodo-filter-nl.png)
+
+And the configuration of the newly added filter expert:
+
+![Configuration of the filter expert as listed above](images/lesson-2-feodo-filter-nl-details.png)
 
 </details>
 
