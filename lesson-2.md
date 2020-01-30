@@ -223,7 +223,7 @@ Next, check if the feodo collector indeed fetched all the data, passed it throug
 <details>
     <summary>Click to see the answer.</summary>
 
-* ```bash
+```bash
 intelmqctl start feodo-tracker-browse-collector
 intelmqctl start feodo-tracker-browse-parser
 intelmqctl start deduplicator-expert
@@ -237,8 +237,10 @@ intelmqctl start file-output
 
 Make sure the bots are indeed running and that they fetched something from the Internet and parsed it:
 
-* ```intelmqctl status
-cat /opt/intelmq/var/log/*feodo*.log```
+```bash
+intelmqctl status
+cat /opt/intelmq/var/log/*feodo*.log
+```
 
 Output (your output might vary):
 ```
