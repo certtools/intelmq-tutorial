@@ -186,11 +186,12 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Every bot talks with other bots via **queues**. Queues are basically message queues in a MQ system (by default, IntelMQ uses Redis as MQ system). Messages are basically log lines which should get processed.
 
-Next, we would like to start the `spamhaus-drop-collector` again and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
+Next, we would like to start the `spamhaus-drop-collector` again (and its next bot, the `spamhaus-drop-parser`) and look up how many events are waiting to be processed in the queue of the next bot (the `deduplicator-expert` in our initial configuration).
 
 <details>
     <summary>Click to see the answer.</summary>
 
+* `intelmqctl start spamhaus-drop-collector`
 * `intelmqctl start spamhaus-drop-parser`
 * `intelmqctl list queues -q`   # shows all non-empty queues:
 ```
