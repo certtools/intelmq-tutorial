@@ -28,7 +28,7 @@ You should see a small website like:
 We **highly** recommend, to ssh into the VM from your favorite terminal program, like so:
 ```bash
 
-ssh -p 22222 user@localhost
+ssh -p 2222 user@localhost
 ```
 
 ![ssh-into-the-VM](images/terminal-ssh-in.png)
