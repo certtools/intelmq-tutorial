@@ -278,7 +278,7 @@ This bot already downloads data from the Internet. If your internet connection d
 
 Also, if your data does not appear in the output file, please check the message queues if something got stuck. Also check if all bots in the pipeline are indeed running.
 
-In case you started these bots already previously, the data might have gotten de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"` to flush the deduplicator's cache and then restart the collectors.
+In case you started these bots already previously, the data might have gotten de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"` to flush the deduplicator's cache. Afterwards, restart the collectors to fetch new data.
 
 ### Visualizing everything
 
@@ -433,6 +433,12 @@ If the upstream data did not change, the parsed data is the same as before (exce
 #### Task: Bypass the deduplicator
 
 For testing and demo purposes it is helpful to temporarily deactivate this behavior. Look up the documentation to find ways how this can be achieved and apply the change.
+
+<details>
+    <summary>Click to see a hint.</summary>
+
+Look for "bypass" in the [deduplicator's bot documentation](https://github.com/certtools/intelmq/blob/master/docs/Bots.md#deduplicator).
+</details>
 
 <details>
     <summary>Click to see the answer.</summary>
