@@ -337,6 +337,9 @@ And the configuration of the newly added filter expert:
 New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://github.com/certtools/intelmq/blob/master/docs/Developers-Guide.md#feeds-documentation) to add it!
 
 ### Task
+
+**This does currently not work, see [Issue #9](https://github.com/certtools/intelmq-tutorial/issues/9).**
+
 Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains).
 
 Start the configured collector and parser.
