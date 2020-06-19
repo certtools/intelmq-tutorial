@@ -326,7 +326,7 @@ And the configuration of the newly added filter expert:
 
 ### If something went wrong
 
-* make sure, all needed bots are running
+* make sure, all needed bots are running (don't forget to start the newly defined filter-expert and file-output bot)
 * make sure that the file output bot-id has a *different* name than the already previously existing one. I called it "File-Output2" in the screenshot.
 * make sure the existing pipeline link between the -parser and the deduplicator got removed.
 * In case you started these bots already previously, the data might got de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`
