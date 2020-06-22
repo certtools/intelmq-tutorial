@@ -242,7 +242,7 @@ The bot is the "Generic DB Lookup" Expert.
 * `table`: `ti`
 * `user`: not relevant
 
-</smtp>
+</details>
 
 ## Basic SMTP
 
