@@ -25,7 +25,7 @@ You should see a small website like:
 
 ### **IMPORTANT**: *copy & paste support*
 
-We **highly** recommend, to ssh into the VM from your favorite terminal program, like so:
+We **highly** recommend, to ssh into the VM from your favorite terminal program, like so (password `user`):
 ```bash
 
 ssh -p 2222 user@localhost
@@ -46,7 +46,7 @@ ping www.google.com
 And finally, if you get lost, the VM can be reset so that you have a clear baseline to start from.
 You can either create a [snaptshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
 
-### Updateing to the latest tutorial
+### Updating to the latest tutorial
 
 Before starting with the tutorial, apply some updates to the VM:
 
@@ -326,7 +326,7 @@ And the configuration of the newly added filter expert:
 
 ### If something went wrong
 
-* make sure, all needed bots are running
+* make sure, all needed bots are running (don't forget to start the newly defined filter-expert and file-output bot)
 * make sure that the file output bot-id has a *different* name than the already previously existing one. I called it "File-Output2" in the screenshot.
 * make sure the existing pipeline link between the -parser and the deduplicator got removed.
 * In case you started these bots already previously, the data might got de-duplicated. We will cover this topic later, but for now you can issue this command: `redis-cli -n 6 -c "FLUSHDB"`

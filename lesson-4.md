@@ -19,7 +19,7 @@ These tools can be installed independently from IntelMQ. The simplest way is to 
 
 ## Task: Download and configuration of the Tool
 
-Clone the repoitory https://github.com/jhemp/intelmq-tools in the home folder of the root user.
+Clone the repository https://github.com/jhemp/intelmq-tools in the home folder of the root user.
 
 
 ```bash
@@ -47,11 +47,11 @@ binFolder=/usr/bin
 
 # Tools
 
-The tool provides several subtools. The follwing sections will describe them.
+The tool provides several subtools. The following sections will describe them.
 
 ##  Details of IntelMQ
 
-The `-d` flat shows details of the installation.
+The `-d` flag shows details of the installation.
 
 ```bash
 ~/intelmq-tools $ ./intelmq_tools.py -d
@@ -81,7 +81,7 @@ Running Instances        0
 ....
 ```
 
-The listing offers several differet methods to show bots
+The listing offers several different methods to show bots
 
 Lists bots
 
@@ -99,7 +99,7 @@ optional arguments:
 
 ##  Check configuration
 
-The check tool compares the different configuratuins and displays the found differences.
+The check tool compares the different configurations and displays the found differences.
 
 ```bash
 ~/intelmq-tools $  ./intelmq_tools.py check -r

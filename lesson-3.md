@@ -31,7 +31,7 @@ These settings are not "parameters" as the other normal parameters you applied u
 
 ### Task: configure a scheduled bot
 
-Configure the previously added file collector for for shadowserver data as scheduled bot.
+Configure the previously added file collector for shadowserver data as scheduled bot.
 
 Start it manually to check if the bot correctly stops after the run.
 
@@ -178,7 +178,7 @@ On submission, the box should say "Successfully processed 3 lines.".
 To have a look what bots actually do and for testing purposes it is often useful to start bots in foreground with detailed logging.
 This is what `intelmqctl run` is for. Details can be found in the documenation of [intelmqctl](https://github.com/certtools/intelmq/blob/master/docs/intelmqctl.md#run) and with `intelmqctl run -h`. `-h` or `--help` are also available for the various subcommands.
 
-Found out how you can check what country the IP address `131.130.254.77` is in, according to the previously configured MaxMind Geolocation lookup bot.
+Find out how you can check what country the IP address `131.130.254.77` is in, according to the previously configured MaxMind Geolocation lookup bot.
 But do not actually insert this data to the processing pipeline of IntelMQ.
 
 Hint: The above IP address is represented in IntelMQ as `{"source.ip": "131.130.254.77"}`
@@ -242,7 +242,7 @@ The bot is the "Generic DB Lookup" Expert.
 * `table`: `ti`
 * `user`: not relevant
 
-</smtp>
+</details>
 
 ## Basic SMTP
 
