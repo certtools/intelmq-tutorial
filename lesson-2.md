@@ -25,7 +25,7 @@ You should see a small website like:
 
 ### **IMPORTANT**: *copy & paste support*
 
-We **highly** recommend, to ssh into the VM from your favorite terminal program, like so (password: user):
+We **highly** recommend, to ssh into the VM from your favorite terminal program, like so (password `user`):
 ```bash
 
 ssh -p 2222 user@localhost
