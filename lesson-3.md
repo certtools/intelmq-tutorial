@@ -31,7 +31,7 @@ These settings are not "parameters" as the other normal parameters you applied u
 
 ### Task: configure a scheduled bot
 
-Configure the previously added file collector for for shadowserver data as scheduled bot.
+Configure the previously added file collector for shadowserver data as scheduled bot.
 
 Start it manually to check if the bot correctly stops after the run.
 
