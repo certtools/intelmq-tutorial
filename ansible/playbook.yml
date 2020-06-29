@@ -54,6 +54,7 @@
        - python3-bs4
        - rabbitmq-server
        - python3-pika
+       - python3-imbox
        # for the postgresql_* ansible modules
        - python-psycopg2
        # for ansible unarchive
