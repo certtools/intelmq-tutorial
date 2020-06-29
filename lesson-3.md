@@ -308,7 +308,12 @@ In the RabbitMQ webinterface watch the statistics of the queues.
 
 ### Fody
 
-### malwarenames mapping
+### Malware (Family) Name Mapping Project
+
+The [Malware Name Mapping](https://github.com/certtools/malware_name_mapping) is a project which evolved from IntelMQ and is maintained under the certtools-umbrella organization. It's sole purpose is providing a mapping of various (feed-specific and accurat) malware names to well-known and more generic malware family names.
+
+IntelMQ includes [tools in it's contrib sub-tree](https://github.com/certtools/intelmq/tree/master/contrib/malware_name_mapping) to download and convert the mapping for use in IntelMQ.
+The link above describes who the integration into IntelMQ works and how you can use the Modify-Bot to apply the mapping to your data. In the VM, the download script can be found at `/opt/dev_intelmq/contrib/malware_name_mapping/download_mapping.py`. Call the script with `--help` to get an overview of the parameters and a short documentation.
 
 ### stats portal, constituency portal
 
