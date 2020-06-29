@@ -1,7 +1,7 @@
 # Lesson 4: Advanced topics for IntelMQ developers - custom BOTS
 
 
-How to develop new bots for intelMQ is described [here](https://intelmq.readthedocs.io/en/latest/Developers-Guide/#bot-developer-guide)
+How to develop new bots for IntelMQ is described [here](https://intelmq.readthedocs.io/en/latest/Developers-Guide/#bot-developer-guide)
 
 ## Motivation
 
