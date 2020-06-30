@@ -338,9 +338,7 @@ New feeds can be configured by adding a collector and the matching parser. The [
 
 ### Task
 
-**This does currently not work, see [Issue #9](https://github.com/certtools/intelmq-tutorial/issues/9).**
-
-Configure the "Bambenek C2 Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#c2-domains).
+Configure the "DynDNS Infected Domains" feed as described [in the documentation](https://github.com/certtools/intelmq/blob/master/docs/Feeds.md#infected-domains) and connect it to the existing Deduplicator Expert.
 
 Start the configured collector and parser.
 
@@ -352,15 +350,15 @@ Verify the events were processed by checking the output file `/opt/intelmq/var/l
 #### Answer
 Runtime configuration:
 ```json
-    "bambenek-c2-domains-collector": {
+    "dyndns-infected-domains-collector": {
         "parameters": {
             "extract_files": false,
             "http_password": null,
-            "http_url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt",
+            "http_url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt",
             "http_url_formatting": false,
             "http_username": null,
-            "name": "C2 Domains",
-            "provider": "Bambenek",
+            "name": "Infected Domains",
+            "provider": "DynDNS",
             "rate_limit": 3600,
             "ssl_client_certificate": null
         },
@@ -371,39 +369,39 @@ Runtime configuration:
         "enabled": true,
         "run_mode": "continuous"
     },
-    "bambenek-parser": {
+    "dyndns-infected-domains-parser": {
         "parameters": {},
-        "name": "Bambenek",
+        "name": "DynDNS ponmocup Domains",
         "group": "Parser",
-        "module": "intelmq.bots.parsers.bambenek.parser",
-        "description": "Bambenek parser is the bot responsible to parse and and sanitize the information from the feeds available from Bambenek.",
+        "module": "intelmq.bots.parsers.dyn.parser",
+        "description": "Dyn Parser is the bot responsible to parse the report and sanitize the information.",
         "enabled": true,
         "run_mode": "continuous"
     }
 ```
 Pipeline configuration:
 ```json
-    "bambenek-c2-domains-collector": {
+    "dyndns-infected-domains-collector": {
         "destination-queues": [
-            "bambenek-parser-queue"
+            "dyndns-infected-domains-parser-queue"
         ]
     },
-    "bambenek-parser": {
-        "source-queue": "bambenek-parser-queue",
+    "dyndns-infected-domains-parser": {
+        "source-queue": "dyndns-infected-domains-parser-queue",
         "destination-queues": [
             "deduplicator-expert-queue"
         ]
     },
 ```
 
-* `intelmqctl start bambenek-c2-domains-collector` (depending on which ID you gave your new bot)
-* `intelmqctl start bambenek-parser` (depending on which ID you gave your new bot)
+* `intelmqctl start dyndns-infected-domains-collector` (depending on which ID you gave your new bot)
+* `intelmqctl start dyndns-infected-domains-parser` (depending on which ID you gave your new bot)
 * `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
 ```json
 ...
-{"feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "time.observation": "2020-01-30T11:55:54+00:00", "event_description.text": "Domain used by banjori", "event_description.url": "http://osint.bambenekconsulting.com/manual/banjori.txt", "raw": "bHR5ZW1lbi5jb20sRG9tYWluIHVzZWQgYnkgYmFuam9yaSwyMDIwLTAxLTMwIDExOjAzLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC9iYW5qb3JpLnR4dA==", "malware.name": "banjori", "source.fqdn": "ltyemen.com", "time.source": "2020-01-30T11:03:00+00:00", "classification.type": "c2server", "status": "online", "classification.taxonomy": "malicious code", "source.ip": "198.38.83.24", "source.asn": 23352, "source.network": "198.38.83.0/24", "source.geolocation.cc": "US", "source.registry": "ARIN", "source.allocated": "2012-04-20T00:00:00+00:00", "source.as_name": "SERVERCENTRAL, US"}
+{"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-29T16:32:28+00:00", "time.source": "2020-06-29T07:27:39+00:00", "classification.type": "malware", "source.fqdn": "abusalewm.exceltoner.com", "source.url": "http://abusalewm.exceltoner.com/pview", "destination.fqdn": "www.timelessimagesmi.com", "event_description.text": "has malicious code redirecting to malicious host", "raw": "LyBhYnVzYWxld20uZXhjZWx0b25lci5jb20gaHR0cDovL2FidXNhbGV3bS5leGNlbHRvbmVyLmNvbS9wdmlldyB3d3cudGltZWxlc3NpbWFnZXNtaS5jb20=", "classification.taxonomy": "malicious code", "source.ip": "31.210.96.158", "destination.ip": "66.96.149.32", "source.asn": 197328, "source.network": "31.210.96.0/24", "source.geolocation.cc": "TR", "source.registry": "RIPE", "source.allocated": "2011-05-04T00:00:00+00:00", "source.as_name": "INETLTD, TR", "destination.asn": 29873, "destination.network": "66.96.128.0/18", "destination.geolocation.cc": "US", "destination.registry": "ARIN", "destination.allocated": "2001-04-03T00:00:00+00:00", "destination.as_name": "BIZLAND-SD, US"}
 ```
-As you can see, the data is from the Bambenek C2 Domains feed.
+As you can see, the data is from the DynDNS Infected Domains feed.
 
 (Your output may slightly vary)
 </details>
@@ -464,7 +462,7 @@ Geolocation information is crucial to determine how to act on received data.
 The file `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database for fast local lookups.
 
 Add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
-(Re-)Start any collector containing IP addresses of FQDNs (e.g. the Bambenek feed) and start all needed bots to see the data in the file.
+(Re-)Start any collector containing IP addresses (e.g. the DynDNS feed) and start all needed bots to see the data in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -481,7 +479,7 @@ If you added the new bot manually in the configuration files, reload the gethost
 * `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
 ```json
 ...
-{"classification.taxonomy": "malicious code", "classification.type": "c2server", "event_description.text": "Domain used by virut", "event_description.url": "http://osint.bambenekconsulting.com/manual/virut.txt", "feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "malware.name": "virut", "raw": "d296dXVwLmNvbSxEb21haW4gdXNlZCBieSB2aXJ1dCwyMDIwLTAxLTI3IDEyOjExLGh0dHA6Ly9vc2ludC5iYW1iZW5la2NvbnN1bHRpbmcuY29tL21hbnVhbC92aXJ1dC50eHQ=", "source.fqdn": "wozuup.com", "source.geolocation.cc": "US", "source.geolocation.city": "San Francisco", "source.geolocation.latitude": 37.7506, "source.geolocation.longitude": -122.4121, "source.ip": "192.0.78.12", "status": "online", "time.observation": "2020-01-27T12:37:55+00:00", "time.source": "2020-01-27T12:11:00+00:00"}
+{"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-29T16:32:28+00:00", "time.source": "2020-06-29T07:27:39+00:00", "classification.type": "compromised", "destination.fqdn": "zahasky.greatserviceforless.com", "destination.url": "http://zahasky.greatserviceforless.com/bbc/bbc/s", "source.fqdn": "stillcatholic.com", "event_description.text": "host has been compromised and has malicious code infecting users", "raw": "LyB6YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tIGh0dHA6Ly96YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tL2JiYy9iYmMvcyBzdGlsbGNhdGhvbGljLmNvbQ==", "classification.taxonomy": "intrusions", "source.ip": "74.208.236.193", "source.geolocation.cc": "US", "source.geolocation.latitude": 37.751, "source.geolocation.longitude": -97.822}
 ```
 As you can see, the data contains several `source.geolocation.*` fields including the country, city and coordinates.
 </details>
@@ -492,7 +490,7 @@ The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data download
 
 ### Task
 
-Add an ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the Bambenek collector to get new data and check the output in the file.
+Add an ASN lookup bot to your pipeline between your configured Geolocation Expert and the file output. Start the expert. Restart the DynDNS collector to get new data and check the output in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -502,12 +500,14 @@ The bot is the "ASN Lookup" expert. Parameters:
 * `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
 * Screenshot:
   ![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
+* Start it: `intelmqctl start asn-lookup-expert` and reload the bot before: `intelmqctl reload maxmind-geoip-expert`.
+* Restart the collector: `intelmqctl restart dyndns-infected-domains-collector`.
 * Check the output file: `tail /opt/intelmq/var/lib/bots/file-output/events.txt`:
 ```json
 ...
-{"feed.accuracy": 100.0, "feed.name": "C2 Domains", "feed.provider": "Bambenek", "feed.url": "https://osint.bambenekconsulting.com/feeds/c2-dommasterlist.txt", "time.observation": "2020-01-30T15:30:24+00:00", "event_description.text": "Domain used by pykspa", "event_description.url": "http://osint.bambenekconsulting.com/manual/pykspa.txt", "raw": "bWVndWlhLm5ldCxEb21haW4gdXNlZCBieSBweWtzcGEsMjAyMC0wMS0zMCAxNTowNyxodHRwOi8vb3NpbnQuYmFtYmVuZWtjb25zdWx0aW5nLmNvbS9tYW51YWwvcHlrc3BhLnR4dA==", "malware.name": "pykspa", "source.fqdn": "meguia.net", "time.source": "2020-01-30T15:07:00+00:00", "classification.type": "c2server", "status": "online", "classification.taxonomy": "malicious code", "source.ip": "189.50.110.40", "source.geolocation.cc": "BR", "source.geolocation.latitude": -22.4929, "source.geolocation.longitude": -48.7109, "source.geolocation.city": "Macatuba", "source.asn": 28668, "source.network": "189.50.104.0/21"}
+{"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-30T07:45:35+00:00", "time.source": "2020-06-30T07:29:02+00:00", "classification.type": "compromised", "destination.fqdn": "zahasky.greatserviceforless.com", "destination.url": "http://zahasky.greatserviceforless.com/__utm.gif", "source.fqdn": "stillcatholic.com", "event_description.text": "host has been compromised and has malicious code infecting users", "raw": "LyB6YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tIGh0dHA6Ly96YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tL19fdXRtLmdpZiBzdGlsbGNhdGhvbGljLmNvbQ==", "classification.taxonomy": "intrusions", "source.ip": "74.208.236.193", "source.geolocation.cc": "US", "source.geolocation.latitude": 37.751, "source.geolocation.longitude": -97.822, "source.asn": 8560, "source.network": "74.208.0.0/16"}
 ```
-As you can see, the data contains the `source.asn` field with the value 28668 in this case.
+As you can see, the data contains the `source.asn` field with the value 8560 in this case.
 </details>
 
 ## The IntelMQ manager
