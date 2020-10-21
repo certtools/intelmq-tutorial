@@ -57,7 +57,7 @@ Observe in the log file that it was running. In case of errors, cron will also s
 
 ## PostgreSQL DB and DB output
 
-### Task: configure an output bot when sends to the (pre-configured) Postgres DB.
+### Task: configure an output bot that sends to the (pre-configured) Postgres DB.
 
 The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can connect via IPv4 and IPv6 locally on port 5432 without SSL.
 Further, connecting via socket (and `psql` on the command line), every connection is trusted.
