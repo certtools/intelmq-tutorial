@@ -55,13 +55,14 @@ Observe in the log file that it was running. In case of errors, cron will also s
 * Check the logs: `tail -f /opt/intelmq/var/log/shadowserver-file-collector.log`
 </details>
 
-## PostgreSQL DB and DB output
+## PostgreSQL DB and DB output ("EventDB")
 
 ### Task: configure an output bot that sends to the (pre-configured) Postgres DB.
 
 The installed PostgreSQL has an user `intelmq` with password `intelmq`, you can connect via IPv4 and IPv6 locally on port 5432 without SSL.
 Further, connecting via socket (and `psql` on the command line), every connection is trusted.
-The database `intelmq` contains a table `events` with the same schema as .
+The database `intelmq` contains a table `events` with the same schema as the internal data format of intelmq ("IDF", previously "Data Harmonization Ontology" "DHO").
+This means that every field available in IntelMQ events is represented as column in the database.
 
 Add an output bot for postgresql in parallel to the file-output.
 
