@@ -512,7 +512,9 @@ As you can see, the data contains the `source.asn` field with the value 8560 in 
 
 ## The IntelMQ manager
 
-Intro, screenshots, text description. What can it do for you, when is it better to use the cmd line? Etc.
+The IntelMQ Manager is a graphical user interface offering visualization. The configurations tab shows the connections of all bots which allows you to quickly grasp the characteristics of your deployed botnet and identify potential bottlenecks.
+
+It is not and does not intend to be a fully featured monitoring tool, there are much better tools out there and every organization has it's own favorite tool anyway.
 
 ### Task: configure a new feed from local files
 
@@ -537,6 +539,7 @@ Parameters for the "ShadowServer" parser:
 * `overwrite`: `true`: this will set the `feed.name` field properly
 </details>
 
-# Recap
+## Recap
 
-
+In this lesson we have learned to configure commonly used bots, to first collect and correctly parse data, then to add additional information to it.
+In the next lesson we see some more advanced features and use some other tools part of the IntelMQ ecosystem.

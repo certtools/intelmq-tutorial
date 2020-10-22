@@ -298,16 +298,41 @@ In the RabbitMQ webinterface watch the statistics of the queues.
 
 ## Interfacing with a ticket system
 
-### mail-gen (theory)
+There is currently no standard solution to group data and send it out to the corresponding recipient as the workflows of the IntelMQ users differ so much.
+However you can have a look or use two approaches described here.
 
-### Briefly talk about how CERT.at does it (squelcher + intelmqcli) (theory)
+### Output Bot
 
+You can use output bots like SMTP or the Request Tracker bot to send data to recipients.
+But this data is not grouped, which means there is one event per e-mail/ticket.
+
+### IntelMQ mailgen
+
+IntelMQ Mailgen is a solution used by BSI/CERTBUND to send grouped notifications to network owners not directly interfacing with a ticketing system.
+The data is retrieved from a PostgreSQL database and sent using SMTP, but the subjects contains a unique ticket identifier.
+Responses to the e-mails then land in the OTRS system and can be dealt with there.
+This approach also reduces the load in the ticketing system.
+
+→ [Repository: intelmq-mailgen](https://github.com/Intevation/intelmq-mailgen)
+
+### Squelcher and RTIR (ongoing work)
+CERT.at directly interfaces with RTIR after collecting the data in a PostgreSQL database as well.
+The tool suppresses ("squelches") events during a specified time period to avoid too much noise at the recipients end.
+The tools are not well documented, but can be found in the [CERT.at fork if IntelMQ](https://github.com/certat/intelmq/).
+There is ongoing work to generalize the code and make it easier available.
 
 ## Overview ecosystem (theory)
 
-### mail-gen
+See also https://intelmq.readthedocs.io/en/latest/guides/Ecosystem.html
 
-### Fody
+## IntelMQ Fody + Backend
+
+Fody is an interface for intelmq-mailgen's contact database, it's OTRS and the EventDB.
+The certbund-contact expert fetches the information from this contact database and provides scripts to import RIPE data into the contact database.
+
+* →[Repository: intelmq-fody](https://github.com/Intevation/intelmq-fody/)
+* →[Repository: intelmq-fody-backend](https://github.com/Intevation/intelmq-fody-backend/)
+* →[Repository: intelmq-certbund-contact](https://github.com/Intevation/intelmq-certbund-contact/)
 
 ### Malware (Family) Name Mapping Project
 
@@ -316,6 +341,6 @@ The [Malware Name Mapping](https://github.com/certtools/malware_name_mapping) is
 IntelMQ includes [tools in it's contrib sub-tree](https://github.com/certtools/intelmq/tree/master/contrib/malware_name_mapping) to download and convert the mapping for use in IntelMQ.
 The link above describes who the integration into IntelMQ works and how you can use the Modify-Bot to apply the mapping to your data. In the VM, the download script can be found at `/opt/dev_intelmq/contrib/malware_name_mapping/download_mapping.py`. Call the script with `--help` to get an overview of the parameters and a short documentation.
 
-### stats portal, constituency portal
+### Stats Portal (PostgreSQL EventDB)
 
-
+The "stats portal" is a framework to generate statistics from a PostgreSQL EventDB using Grafana. More information can be found at [github.com/certtools/stats-portal](https://github.com/certtools/stats-portal).
