@@ -20,4 +20,4 @@ Please let us know your input on the mailinglist and the issues.
 The work is licensed unter GNU Free Documentation License v1.3 or later.
 
 This project was partially funded by the CEF framework
-![Co-financed by the Connecting Europe Facility of the European Union](iamges/cef_logo.png)
+![Co-financed by the Connecting Europe Facility of the European Union](images/cef_logo.png)
