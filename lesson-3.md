@@ -344,3 +344,7 @@ The link above describes who the integration into IntelMQ works and how you can 
 ### Stats Portal (PostgreSQL EventDB)
 
 The "stats portal" is a framework to generate statistics from a PostgreSQL EventDB using Grafana. More information can be found at [github.com/certtools/stats-portal](https://github.com/certtools/stats-portal).
+
+## Next lesson
+
+Now continue with [lesson four](lesson-4.md).

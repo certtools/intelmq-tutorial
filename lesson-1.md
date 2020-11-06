@@ -14,3 +14,7 @@ as part of the IntelMQ workshop, we will walk you through the slides and explain
 - Queue: Each bot has an input and an output queue (a pile of messages), where it reads or writes the messages to.
 - Message, Event & Report: Message is the generic term for the data bunches exchanged between the bots. Reports are a kind Messages containing unparsed data, this is only exchanged between Collectors and Parsers. After the parsing, the messages are Events, which contain parsed data, and one IoC (Indicator of Compromise) only.
 - to be continued...
+
+## Next lesson
+
+Now continue with [lesson two](lesson-2.md).

@@ -543,3 +543,7 @@ Parameters for the "ShadowServer" parser:
 
 In this lesson we have learned to configure commonly used bots, to first collect and correctly parse data, then to add additional information to it.
 In the next lesson we see some more advanced features and use some other tools part of the IntelMQ ecosystem.
+
+## Next lesson
+
+Now continue with [lesson three](lesson-3.md).
