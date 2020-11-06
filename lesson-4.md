@@ -3,6 +3,8 @@
 
 How to develop new bots for IntelMQ is described [here](https://intelmq.readthedocs.io/en/latest/Developers-Guide/#bot-developer-guide)
 
+Please note that this tool is contributed by the community and we cannot ensure compatibility the IntelMQ Core itself.
+
 ## Motivation
 
 
