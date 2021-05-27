@@ -39,3 +39,4 @@ inet_protocols = all
 
 local_recipient_maps =
 luser_relay = user
+home_mailbox = Maildir/
