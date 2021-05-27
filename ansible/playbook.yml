@@ -28,6 +28,12 @@
      copy:
        src: motd
        dest: /etc/
+   - name: Set roundcube dbconfig options
+     debconf:
+       name: roundcube-core
+       question: roundcube/database-type
+       value: sqlite3
+       vtype: string
    - name: install packages
      package:
        name:
@@ -70,6 +76,8 @@
        - dovecot-imapd
        - php-curl
        - php-xml
+       - roundcube-sqlite3
+       - roundcube-core
    # INTELMQ CORE
    - name: Create directories
      file:
@@ -359,37 +367,15 @@
      systemd:
        name: postfix
        state: reloaded
-   - name: download rainloop
-     unarchive:
-       src: http://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
-       dest: /tmp/
-       remote_src: yes
-     args:
-       creates: /tmp/rainloop
-   - name: Create webmail directory
-     file:
-       path: /var/www/html/webmail/
-       state: directory
-   - name: install rainloop
-     copy:
-       src: /tmp/rainloop
-       dest: /var/www/html/webmail/
-       remote_src: yes
-   - name: install rainloop index file
-     copy:
-       src: /var/www/html/webmail/rainloop/v/1.13.0/index.php.root
-       dest: /var/www/html/webmail/index.php
-       remote_src: yes
-   - name: Install data directory
-     unarchive:
-       src: rainloop-data.tar.gz
-       dest: /var/www/html/webmail/
-   - name: Set file permissions on rainloop
-     file:
-       path: /var/www/html/webmail/
-       recurse: yes
-       owner: www-data
-       group: www-data
+   - name: configure roundcube
+     lineinfile:
+       path: /etc/roundcube/config.inc.php
+       regexp: "^$config['default_host']"
+       line: "$config['default_host'] = 'localhost';"
+   - name: enable roundcube in apache
+     lineinfile:
+       path: /etc/apache2/conf-enabled/roundcube.conf
+       line: "Alias /roundcube /var/lib/roundcube"
    # RESET
    - name: install reset script
      copy:
