@@ -35,6 +35,14 @@
        question: roundcube/database-type
        value: sqlite3
        vtype: string
+   - name: Add apt key
+     apt_key:
+       url: https://download.opensuse.org/repositories/home:sebix:intelmq/Debian_10/Release.key
+       state: present
+   - name: Setup APT repository Debian 10
+     apt_repository:
+       repo: deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/Debian_10/ /
+       state: present
    - name: install packages
      package:
        name:
@@ -79,6 +87,9 @@
        - php-xml
        - roundcube-sqlite3
        - roundcube-core
+       - intelmq
+       - intelmq-api
+       - intelmq-manager
    # INTELMQ CORE
    - name: Create directories
      file:
@@ -88,50 +99,14 @@
        owner: intelmq
        group: intelmq
      with_items:
-       - /opt/intelmq/
-       - /opt/intelmq/var/lib/bots/asn_lookup/
-       - /opt/intelmq/var/lib/bots/file-output/
-       - /opt/intelmq/var/lib/bots/maxmind_geoip/
-       - /opt/intelmq/var/lib/bots/modify/
-       - /opt/intelmq/var/log/
-       - /opt/intelmq/var/run/
-       - /opt/intelmq/etc/manager/
-       - /opt/dev_intelmq
-   - name: clone IntelMQ git repository
-     git:
-       repo: https://github.com/certtools/intelmq.git
-       dest: /opt/dev_intelmq
-       version: master
-     become_user: intelmq
-     vars:
-       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
-       ansible_ssh_pipelining: yes
-   - name: install intelmq from local repository
-     pip:
-       name: /opt/dev_intelmq/
-       editable: yes
-       executable: pip3
-     become: True
-   - name: Setup intelmq files
-     copy:
-       src: "{{ item }}"
-       dest: /opt/intelmq/etc/
-       remote_src: yes
-     with_items:
-       - /opt/dev_intelmq/intelmq/etc/
-       - /opt/dev_intelmq/intelmq/bots/BOTS
-   - name: Setup intelmq bash completion
-     copy:
-       src: "/opt/dev_intelmq/contrib/bash-completion/{{ item }}"
-       dest: /usr/share/bash-completion/completions/
-       remote_src: yes
-     with_items:
-       - intelmqctl
-       - intelmqdump
+       - /var/lib/bots/asn_lookup/
+       - /var/lib/bots/file-output/
+       - /var/lib/bots/maxmind_geoip/
+       - /var/lib/bots/modify/
    - name: provide default state file
      copy:
        src: state.json
-       dest: /opt/intelmq/var/lib/state.json
+       dest: /var/lib/state.json
        owner: intelmq
        group: intelmq
    - name: provide default crontab
@@ -148,11 +123,11 @@
        executable: pip3
      become: True
    - name: Provide local lookup database for IP address to ASN
-     shell: pyasn_util_download.py --latestv46 && pyasn_util_convert.py --single rib.* /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
+     shell: pyasn_util_download.py --latestv46 && pyasn_util_convert.py --single rib.* /var/lib/bots/asn_lookup/ipasn.dat
      args:
        chdir: /tmp/
        creates:
-         /opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat
+         /var/lib/bots/asn_lookup/ipasn.dat
      become_user: intelmq
      vars:
        # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
@@ -160,50 +135,33 @@
    - name: Provide local lookup database for IP address to Geolocation
      copy:
        src: GeoLite2-City.mmdb
-       dest: /opt/intelmq/var/lib/bots/maxmind_geoip/
+       dest: /var/lib/bots/maxmind_geoip/
+   - name: Fetch download_mapping.py script
+     get_url:
+       url: https://raw.githubusercontent.com/certtools/intelmq/develop/contrib/malware_name_mapping/download_mapping.py
+       dest: /usr/local/bin/download_mapping.py
+       mode: '755'
    - name: Download Malware Name Mapping
      command:
        argv:
-       - /opt/dev_intelmq/contrib/malware_name_mapping/download_mapping.py
+       - /usr/local/bin/download_mapping.py
        - --include-misp
-       - /opt/intelmq/var/lib/bots/modify/malware_name_mapping.json
+       - /var/lib/bots/modify/malware_name_mapping.json
      args:
-       creates: /opt/intelmq/var/lib/bots/modify/malware_name_mapping.json
-   # INTELMQ-MANAGER
-   - name: clone IntelMQ Manager git repository
-     git:
-       repo: https://github.com/certtools/intelmq-manager.git
-       dest: /home/user/intelmq-manager/
-       version: master
-     become_user: user
-     vars:
-       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
-       ansible_ssh_pipelining: yes
-   - name: Link IntelMQ Manager in webroot
-     file:
-       src: /home/user/intelmq-manager/intelmq-manager
-       dest: /var/www/html/manager
-       state: link
-       remote_src: yes
+       creates: /var/lib/bots/modify/malware_name_mapping.json
    - name: provide default positions configuration
      copy:
        src: positions.conf
-       dest: /opt/intelmq/etc/manager/positions.conf
+       dest: /etc/intelmq/manager/positions.conf
        owner: intelmq
        group: www-data
        mode: '0664'
-   - name: Add www-data to the intelmq group
-     user:
-       name: www-data
-       groups: intelmq
-       append: yes
-   - name: Set file permissions on configuration
-     file:
-       path: /opt/intelmq/etc/
-       recurse: yes
-       owner: intelmq
-       group: www-data
-       mode: u+rw,g+rw
+   # INTELMQ-API
+   - name: Install intelmq-api config
+     copy:
+       src: api-config.json
+       dest: /etc/intelmq/api-config.json
+       mode: '0664'
    # WEBINPUT
    - name: install intelmq-webinput-csv dependencies
      pip:
@@ -228,7 +186,7 @@
    - name: Provide Webinput configuration
      copy:
        src: webinput_csv.conf
-       dest: /opt/intelmq/etc/webinput_csv.conf
+       dest: /etc/webinput_csv.conf
    - name: Restart Apache
      systemd:
        name: apache2
@@ -262,11 +220,11 @@
    - name: Transfer SQL file
      copy:
        src: initdb.sql
-       dest: /opt/intelmq/var/lib/bots/sql/
+       dest: /var/lib/bots/sql/
    - name: Create events table
      postgresql_query:
        db: intelmq
-       path_to_script: /opt/intelmq/var/lib/bots/sql/initdb.sql
+       path_to_script: /var/lib/bots/sql/initdb.sql
        login_user: intelmq
        login_password: intelmq
    # SQLITE
@@ -278,11 +236,11 @@
    - name: Move TI JSON database
      copy:
        src: ti-teams.json
-       dest: /opt/intelmq/var/lib/bots/sql/
+       dest: /var/lib/bots/sql/
    - name: Execute TI to SQLite converter
-     command: /usr/local/bin/ti-to-sqlite-cc.py --ti /opt/intelmq/var/lib/bots/sql/ti-teams.json /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
+     command: /usr/local/bin/ti-to-sqlite-cc.py --ti /var/lib/bots/sql/ti-teams.json /var/lib/bots/sql/ti-teams.sqlite
      args:
-       creates: /opt/intelmq/var/lib/bots/sql/ti-teams.sqlite
+       creates: /var/lib/bots/sql/ti-teams.sqlite
    # FODY
    - name: install intelmq-fody-backend via pip from cert.at repository fork
      pip:
