@@ -326,6 +326,11 @@
      systemd:
        name: postfix
        state: reloaded
+   - name: Set mail_location in dovecot configuration
+     lineinfile:
+       path: /etc/dovecot/conf.d/10-mail.conf
+       regexp: "^mail_location = "
+       line: "mail_location = maildir:~/Maildir"
    - name: configure roundcube
      lineinfile:
        path: /etc/roundcube/config.inc.php
