@@ -69,7 +69,7 @@ sudo -iu intelmq
 After making sure that we can reach the VM from the host (your PC or laptop), we can take a look at the VM's setup.
 
 But first let us say that the documentation is pretty solid by now. So if you feel lost - apart from this tutorial, you can find 
-the documenation [here](https://intelmq.readthedocs.io/en/latest/guides/User-Guide.html) and the [Developers Guide here](https://intelmq.readthedocs.io/en/latest/guides/Developers-Guide.html)
+the User Guide and the Developers Guide [on readthedocs](https://intelmq.readthedocs.org).
 
 ### The directory structure and command line tools
 
@@ -132,7 +132,7 @@ The following commands will be described later:
 
 You can get help with `intelmqctl -h` or `intelmqctl --help`, also available for sub-commands. Most subcommands also have auto-completion.
 
-A complete list of  available commands can be found in the [intelmqctl documentation](https://intelmq.readthedocs.io/en/latest/guides/intelmqctl.html)
+A complete list of  available commands can be found in the [intelmqctl documentation](https://intelmq.readthedocs.io/en/maintenance/user/intelmqctl.html)
 
 ## Default configuration
 
@@ -334,11 +334,11 @@ And the configuration of the newly added filter expert:
 
 ## Configure a feed:
 
-New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://intelmq.readthedocs.io/en/latest/guides/Feeds.html#c2-domains) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://intelmq.readthedocs.io/en/latest/guides/Developers-Guide.html#feeds-documentation) to add it!
+New feeds can be configured by adding a collector and the matching parser. The [feeds documentation](https://intelmq.readthedocs.io/en/maintenance/user/feeds.html) has a long list of known feeds along with the required configuration parameters. If you know of more feeds, please let us know or [open a pull request](https://intelmq.readthedocs.io/en/maintenance/dev/guide.html#feeds-documentation) to add it!
 
 ### Task
 
-Configure the "DynDNS Infected Domains" feed as described [in the documentation](https://intelmq.readthedocs.io/en/latest/guides/Feeds.html) and connect it to the existing Deduplicator Expert.
+Configure the "DynDNS Infected Domains" feed as described [in the documentation](https://intelmq.readthedocs.io/en/maintenance/user/feeds.html) and connect it to the existing Deduplicator Expert.
 
 Start the configured collector and parser.
 
@@ -438,7 +438,7 @@ For testing and demo purposes it is helpful to temporarily deactivate this behav
 <details>
     <summary>Click to see a hint.</summary>
 
-Look for "bypass" in the [deduplicator's bot documentation](https://intelmq.readthedocs.io/en/latest/guides/Bots.html#deduplicator).
+Look for "bypass" in the [deduplicator's bot documentation](https://intelmq.readthedocs.io/en/maintenance/user/bots.html#deduplicator).
 </details>
 
 <details>
@@ -547,3 +547,4 @@ In the next lesson we see some more advanced features and use some other tools p
 ## Next lesson
 
 Now continue with [lesson three](lesson-3.md).
+
