@@ -1,5 +1,6 @@
 ---
-- hosts: malaga
+- hosts: default
+  become: true
   tasks:
    # GENERIC
    - name: create intelmq unix group
