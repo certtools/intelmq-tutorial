@@ -116,6 +116,11 @@
    - name: install default crontab
      command: crontab -u intelmq /tmp/default_crontab
      become: True
+   - name: Clone IntelMQ repository (needed for test data)
+     git:
+       repo: https://github.com/certtools/intelmq.git
+       dest: /opt/dev_intelmq
+       version: maintenance
    # INTELMQ OPTIONAL DEPENDENCIES
    - name: Install pyasn
      pip:
