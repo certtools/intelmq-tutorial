@@ -3,20 +3,6 @@
   become: true
   tasks:
    # GENERIC
-   - name: create intelmq unix group
-     user:
-       name: intelmq
-       comment: IntelMQ group
-   - name: create intelmq unix user
-     user:
-       name: intelmq
-       comment: IntelMQ user
-       group: intelmq
-       groups: intelmq,sudo
-       home: /opt/intelmq
-       shell: /usr/bin/bash
-       # "intelmq"
-       password: $6$bOYvo2a7$5dDEAH3HLvRio6rAKx45hrvVWtEVDwpMF4IE1oXeu4Y8exYVRlzS6yvAVkZt8QPBSqpMPX7km1ClyQWwqvcnu.
    - name: Setup sudoers
      copy:
        src: files/01_intelmq_tutorial
@@ -103,12 +89,7 @@
        - /var/lib/bots/file-output/
        - /var/lib/bots/maxmind_geoip/
        - /var/lib/bots/modify/
-   - name: provide default state file
-     copy:
-       src: state.json
-       dest: /var/lib/state.json
-       owner: intelmq
-       group: intelmq
+       - /opt/dev_intelmq/
    - name: provide default crontab
      copy:
        src: default_crontab
@@ -121,6 +102,10 @@
        repo: https://github.com/certtools/intelmq.git
        dest: /opt/dev_intelmq
        version: maintenance
+     become_user: intelmq
+     vars:
+       # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
+       ansible_ssh_pipelining: yes
    # INTELMQ OPTIONAL DEPENDENCIES
    - name: Install pyasn
      pip:
@@ -154,13 +139,6 @@
        - /var/lib/bots/modify/malware_name_mapping.json
      args:
        creates: /var/lib/bots/modify/malware_name_mapping.json
-   - name: provide default positions configuration
-     copy:
-       src: positions.conf
-       dest: /etc/intelmq/manager/positions.conf
-       owner: intelmq
-       group: www-data
-       mode: '0664'
    # INTELMQ-API
    - name: Install intelmq-api config
      copy:
