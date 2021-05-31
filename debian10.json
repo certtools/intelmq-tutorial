@@ -32,7 +32,8 @@
       "type": "virtualbox-iso",
       "vboxmanage": [
 	      [ "modifyvm", "{{.Name}}", "--natpf1", "guest_ssh,tcp,,2222,,22" ],
-	      [ "modifyvm", "{{.Name}}", "--natpf1", "guest_http,tcp,,8080,,80" ]
+	      [ "modifyvm", "{{.Name}}", "--natpf1", "guest_http,tcp,,8080,,80" ],
+	      [ "modifyvm", "{{.Name}}", "--natpf1", "guest_rabbitmq,tcp,,15672,,15672" ]
       ]
     }
   ],
