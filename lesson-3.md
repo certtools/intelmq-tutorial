@@ -50,9 +50,9 @@ Observe in the log file that it was running. In case of errors, cron will also s
 * `intelmqctl start shadowserver-file-collector` (depending on which ID you gave your bot)
 * Run `crontab -e` and add at the end of the file:
 ```
-*/5 * * * * /usr/local/bin/intelmqctl start shadowserver-file-collector
+*/5 * * * * /usr/bin/intelmqctl start shadowserver-file-collector
 ```
-* Check the logs: `tail -f /opt/intelmq/var/log/shadowserver-file-collector.log`
+* Check the logs: `tail -f /var/log/intelmq/shadowserver-file-collector.log`
 </details>
 
 ## PostgreSQL DB and DB output ("EventDB")
@@ -218,7 +218,7 @@ The country is Austria, actually this is the IP address of `cert.at`.
 
 ## Looking up contact data from a local database
 
-`/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite` contains a table `ti` with two columns:
+`/var/lib/intelmq/bots/sql/ti-teams.sqlite` contains a table `ti` with two columns:
 `cc` with two-letter country-codes and `email` with a comma-separated list of email addresses
 The data is from TI and contains all national CERTs listed there.
 
@@ -231,7 +231,7 @@ Configure a bot so that all data (with country information) gets the national's 
 #### Answer
 
 The bot is the "Generic DB Lookup" Expert.
-* `database`: `/opt/intelmq/var/lib/bots/sql/ti-teams.sqlite`
+* `database`: `/var/lib/intelmq/bots/sql/ti-teams.sqlite`
 * `engine`: `sqlite`
 * `host`: not relevant
 * `match_fields`: `{"source.geolocation.cc": "cc"}`
@@ -286,7 +286,7 @@ The management interface is available at port 15672, you can login with the cred
 
 Stop the IntelMQ botnet: `intelmqctl stop`
 
-In `/opt/intelmq/etc/defaults.conf` set these parameters:
+In `/etc/intelmq/defaults.conf` set these parameters:
 * `"source_pipeline_broker"` to `"amqp"`
 * `"destination_pipeline_broker"` to `"amqp"`
 * `"source_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
@@ -339,7 +339,7 @@ The certbund-contact expert fetches the information from this contact database a
 The [Malware Name Mapping](https://github.com/certtools/malware_name_mapping) is a project which evolved from IntelMQ and is maintained under the certtools-umbrella organization. It's sole purpose is providing a mapping of various (feed-specific and accurat) malware names to well-known and more generic malware family names.
 
 IntelMQ includes [tools in it's contrib sub-tree](https://github.com/certtools/intelmq/tree/master/contrib/malware_name_mapping) to download and convert the mapping for use in IntelMQ.
-The link above describes who the integration into IntelMQ works and how you can use the Modify-Bot to apply the mapping to your data. In the VM, the download script can be found at `/opt/dev_intelmq/contrib/malware_name_mapping/download_mapping.py`. Call the script with `--help` to get an overview of the parameters and a short documentation.
+The link above describes who the integration into IntelMQ works and how you can use the Modify-Bot to apply the mapping to your data. In the VM, the download script can be found at `/usr/local/bin/download_mapping.py`. Call the script with `--help` to get an overview of the parameters and a short documentation.
 
 ### Stats Portal (PostgreSQL EventDB)
 
