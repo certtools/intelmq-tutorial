@@ -40,7 +40,8 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "./ansible/playbook.yml"
+      "playbook_file": "./ansible/playbook.yml",
+      "user": "user"
     }
   ]
 }
