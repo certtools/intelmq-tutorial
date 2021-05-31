@@ -135,17 +135,14 @@ A complete list of  available commands can be found in the [intelmqctl documenta
 
 ## Default configuration
 
-This tutorial (and in fact every default installation of IntelMQ) comes with a very basic default configuration: some basic bots and public feeds. By *configuration* we mean:
-
-* all *runtime parameters* (c.f. `etc/runtime.conf`) for all bots (for example API-keys, database names, database users, mail server address, etc.) 
-* the *pipeline* configuration (c.f. `etc/pipeline.conf`) which describes which bot is connected to which other bot
-* default settings (`etc/defaults.conf`) which should apply to all bots.
+This tutorial (and in fact every default installation of IntelMQ) comes with a very basic default configuration: some basic bots and public feeds.
+By *configuration* we mean a runtime.yaml file containing the *runtime parameters* for all bots (for example API-keys, database names, database users, mail server address, etc.) and their *pipeline* configuration which describes which bot is connected to which other bot.
 
 In our case, the config consists of:
 
-* 4 collectors and their respective parsers with public feeds.
+* 3 collectors and their respective parsers with public feeds.
 * Some experts providing de-duplication and basic lookups, including a round-robin "load-balanced" bot.
-* A file output bot writing to `/opt/intelmq/var/lib/bots/file-output/events.txt`.
+* A file output bot writing to `/var/lib/bots/file-output/events.txt`.
 
 In the beginning of the tutorial we will work with this configuration, afterwards we will set up our own workflows and add new bots and connections (pipelines).
 
