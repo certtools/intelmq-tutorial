@@ -122,10 +122,6 @@
      vars:
        # required because of become_user with an unprivileged user. see https://docs.ansible.com/ansible/latest/user_guide/become.html#id6
        ansible_ssh_pipelining: yes
-   - name: Provide local lookup database for IP address to Geolocation
-     copy:
-       src: GeoLite2-City.mmdb
-       dest: /var/lib/bots/maxmind_geoip/
    - name: Fetch download_mapping.py script
      get_url:
        url: https://raw.githubusercontent.com/certtools/intelmq/develop/contrib/malware_name_mapping/download_mapping.py

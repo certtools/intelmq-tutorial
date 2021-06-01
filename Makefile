@@ -1,4 +1,4 @@
-pack: ansible/files/GeoLite2-City.mmdb
+pack:
 	packer build debian10.json
 
 clean:

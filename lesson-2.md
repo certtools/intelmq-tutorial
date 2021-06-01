@@ -453,21 +453,20 @@ Look for "bypass" in the [deduplicator's bot documentation](https://intelmq.read
 
 ## Experts: adding information to the stream
 
-The file `/var/lib/intelmq/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database.
-
 ### Task: add geoip info to the previous feed
 
 Geolocation information is crucial to determine how to act on received data.
-The file `/var/lib/intelmq/bots/maxmind_geoip/GeoLite2-City.mmdb` contains the free GeoLite2 database for fast local lookups.
+[https://dev.maxmind.com/geoip/geolite2-free-geolocation-data](maxmind.com) provides a free GeoLite2 database for download for registered users.
+Please download the file and put it into the `/var/lib/intelmq/bots/maxmind_geoip/` directory.
 
-Add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
+Now add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
 (Re-)Start any collector containing IP addresses (e.g. the DynDNS feed) and start all needed bots to see the data in the file.
 
 <details>
     <summary>Click to see the answer.</summary>
 
 #### Answer
-The bot is the "MaxMind GeoIP Expert". The only necessary parameter is:
+The bot is the "MaxMind GeoIP Expert". The only necessary parameter is the path to your downloaded database:
 * `database`: `/var/lib/intelmq/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
 ![Screenshot of the pipeline setup](images/lesson-2-geoip.png)
