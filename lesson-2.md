@@ -157,7 +157,7 @@ The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  
 
 * Here is how you start it: `intelmqctl start spamhaus-drop-collector`
 * Here is how you look at its logs:
-  * `intelmqctl log spamhaus-drop-collector` or (even simpler) `tail -f /var/log/intelmq/spamhaus-drop-collector.log`  should show you the log file:
+  * `intelmqctl log spamhaus-drop-collector` or (even simpler) `tail /var/log/intelmq/spamhaus-drop-collector.log`  should show you the log file:
 ```
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - HTTPCollectorBot initialized with id spamhaus-drop-collector and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 6950.
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - Bot is starting.
