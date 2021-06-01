@@ -204,14 +204,14 @@ Next, we will collect real abuse.ch data from the internet, parse it and send th
 
 ### Task: Emit data with a file output bot and look at the output
 
-Our default configuration has a number of bots which need to get started in order to have a full pipeline path between the Abuse.ch Feodo collector and the file output bot. You can see the pipeline which is configured by default in two ways:
+Our default configuration has a number of bots which need to get started in order to have a full path between the Abuse.ch Feodo collector and the file output bot. You can see the paths between the bots which are configured by default in two ways:
 
-  1. via the `etc/pipeline.conf` file
+  1. via the `/etc/intelmq/runtime.yaml` file
   2. via the IntelMQ manager. 
 
 We will look at the manager in a minute.
 
-First, please look at the the `etc/pipeline.conf` and identify the path the events are taking between the feodo collector and the ouput. Start each bot individually and observe the message queues and the status.
+First, please look at the the `/etc/intelmq/runtime.yaml` and identify the path the events are taking between the feodo collector and the ouput. Start each bot individually and observe the message queues and the status.
 
 Next, check if the feodo collector indeed fetched all the data, passed it through the "botnet" and sent it to the file-output bot, which in turn wrote it to disk.
 
