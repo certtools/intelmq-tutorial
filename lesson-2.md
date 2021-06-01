@@ -456,7 +456,7 @@ Look for "bypass" in the [deduplicator's bot documentation](https://intelmq.read
 ### Task: add geoip info to the previous feed
 
 Geolocation information is crucial to determine how to act on received data.
-[https://dev.maxmind.com/geoip/geolite2-free-geolocation-data](maxmind.com) provides a free GeoLite2 database for download for registered users.
+[maxmind.com](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data) provides a free GeoLite2 database for download for registered users.
 Please download the file and put it into the `/var/lib/intelmq/bots/maxmind_geoip/` directory.
 
 Now add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
