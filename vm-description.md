@@ -64,8 +64,8 @@ A simple postfix and dovecot setup provides mail servers for local usage only, n
 
 No authentication is required to send mails via SMTP at default port 25. TLS and STARTTLS are not supported.
 
-A simple webmail interface (rainloop) is available via the local webserver at `http://localhost:8080/webmail/`. Login is possible with for example `user@localhost` or `intelmq@localhost` and the passwords as described above.
-Any other local mail program can be used to access the mails in mbox format in `/var/mail/`.
+A simple webmail interface is available via the local webserver at `http://localhost:8080/roundcube/`. Login is possible with for example `user` or `intelmq` and the passwords as described above.
+Any other local mail program can be used to access the mails in Maildir format in `~/Maildir`.
 
 ## RabbitMQ
 
