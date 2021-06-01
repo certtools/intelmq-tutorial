@@ -286,7 +286,7 @@ The management interface is available at port 15672, you can login with the cred
 
 Stop the IntelMQ botnet: `intelmqctl stop`
 
-In `/etc/intelmq/defaults.conf` set these parameters:
+In `/etc/intelmq/runtime.yaml` create a ["global" section for systemwide configuration](https://intelmq.readthedocs.io/en/latest/user/configuration-management.html#systemwide-configuration-global) and set these parameters:
 * `"source_pipeline_broker"` to `"amqp"`
 * `"destination_pipeline_broker"` to `"amqp"`
 * `"source_pipeline_port"` to `5672` or remove it (the default for amqp kicks in then)
