@@ -24,6 +24,7 @@
       "guest_os_type": "Debian_64",
       "http_directory": "http",
       "iso_checksum": "file:http://cdimage.debian.org/cdimage/release/10.9.0/amd64/iso-cd/SHA512SUMS",
+      "iso_checksum_type": "sha512",
       "iso_url": "http://cdimage.debian.org/cdimage/release/10.9.0/amd64/iso-cd/debian-10.9.0-amd64-netinst.iso",
       "shutdown_command": "echo 'user' | sudo -S shutdown -P now",
       "ssh_password": "user",
