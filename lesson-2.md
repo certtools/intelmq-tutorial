@@ -1,7 +1,7 @@
 # Lesson 2: Getting started
 
 
-## Familiarization with the VM: makeing sure it works
+## Familiarization with the VM: making sure it works
 
 Before we start, we need to make sure everything works.
 
@@ -44,7 +44,7 @@ ping www.google.com
 ```
 
 And finally, if you get lost, the VM can be reset so that you have a clear baseline to start from.
-You can either create a [snaptshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
+You can either create a [snapshot of the VM now](https://www.virtualbox.org/manual/ch01.html#snapshots), or you can call the `reset-intelmq.sh` script from within the VM's command line (after starting the script, no IntelMQ process should be running anymore, so you might have to restart the processes again if needed).
 
 ### Updating to the latest tutorial
 
