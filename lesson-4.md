@@ -1,5 +1,6 @@
-# Lesson 4: Advanced topics for IntelMQ developers - custom BOTS
+# ~~Lesson 4: Advanced topics for IntelMQ developers - custom BOTS~~ (outdated)
 
+**This section is outdated an not valid anymore for version 3.0.** See [#32](https://github.com/certtools/intelmq-tutorial/issues/32).
 
 How to develop new bots for IntelMQ is described [in the developer guide](https://intelmq.readthedocs.io/en/latest/dev/guide.html#bot-developer-guide)
 
