@@ -80,8 +80,8 @@ In our case, a production installation has been chosen as installation method (i
 Directory layout:
 
 * `/opt/intelmq/etc/intelmq/`: The configuration files.
-* `/opt/intelmq/var/lib/intelmq/`: Data of IntelMQ and it's bots:
-* `/opt/intelmq/var/lib/intelmq/bots/`: For example configuration files of certain bots, local lookup data and output files.
+* `/opt/intelmq/var/lib/`: Data of IntelMQ and it's bots:
+* `/opt/intelmq/var/lib/bots/`: For example configuration files of certain bots, local lookup data and output files.
 * `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/intelmq/`: The internal PID-files.
 
@@ -258,7 +258,7 @@ Output (your output might vary):
 
 And finally, we would like to take a look at its output: the output bot (which is by default the place where all events are sent to in our initial configuration) should show you the feodo events:
 
-* `less /opt/intelmq/var/lib/intelmq/bots/file-output/events.txt`
+* `less /opt/intelmq/var/lib/bots/file-output/events.txt`
 
 Output:
 ```json
@@ -292,7 +292,7 @@ Filter on the country code NL
 
 The Feodo tracker by abuse.ch provides some feeds, the [HTML "feed"](https://feodotracker.abuse.ch/browse/) provides the most information for the C&C server IP addresses including the country and the malware.
 
-Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/var/lib/intelmq/bots/file-output/feodo-nl.txt` by adding the filter after the parser and connecting it to a newly created file output bot.
+Filter the data of the "Feodotracker Browse" feed on country Netherlands (country code "NL") and write the output to `/var/lib/bots/file-output/feodo-nl.txt` by adding the filter after the parser and connecting it to a newly created file output bot.
 
 Then (re-)start the collector bot.
 
@@ -338,7 +338,7 @@ Configure the "DynDNS Infected Domains" feed as described [in the documentation]
 
 Start the configured collector and parser.
 
-Verify the events were processed by checking the output file `/opt/intelmq/var/lib/intelmq/bots/file-output/events.txt`.
+Verify the events were processed by checking the output file `/opt/intelmq/var/lib/bots/file-output/events.txt`.
 
 <details>
     <summary>Click to see the answer.</summary>
@@ -392,7 +392,7 @@ Pipeline configuration:
 
 * `intelmqctl start dyndns-infected-domains-collector` (depending on which ID you gave your new bot)
 * `intelmqctl start dyndns-infected-domains-parser` (depending on which ID you gave your new bot)
-* `tail /opt/intelmq/var/lib/intelmq/bots/file-output/events.txt`
+* `tail /opt/intelmq/var/lib/bots/file-output/events.txt`
 ```json
 ...
 {"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-29T16:32:28+00:00", "time.source": "2020-06-29T07:27:39+00:00", "classification.type": "malware", "source.fqdn": "abusalewm.exceltoner.com", "source.url": "http://abusalewm.exceltoner.com/pview", "destination.fqdn": "www.timelessimagesmi.com", "event_description.text": "has malicious code redirecting to malicious host", "raw": "LyBhYnVzYWxld20uZXhjZWx0b25lci5jb20gaHR0cDovL2FidXNhbGV3bS5leGNlbHRvbmVyLmNvbS9wdmlldyB3d3cudGltZWxlc3NpbWFnZXNtaS5jb20=", "classification.taxonomy": "malicious code", "source.ip": "31.210.96.158", "destination.ip": "66.96.149.32", "source.asn": 197328, "source.network": "31.210.96.0/24", "source.geolocation.cc": "TR", "source.registry": "RIPE", "source.allocated": "2011-05-04T00:00:00+00:00", "source.as_name": "INETLTD, TR", "destination.asn": 29873, "destination.network": "66.96.128.0/18", "destination.geolocation.cc": "US", "destination.registry": "ARIN", "destination.allocated": "2001-04-03T00:00:00+00:00", "destination.as_name": "BIZLAND-SD, US"}
@@ -454,7 +454,7 @@ Look for "bypass" in the [deduplicator's bot documentation](https://intelmq.read
 
 Geolocation information is crucial to determine how to act on received data.
 [maxmind.com](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data) provides a free GeoLite2 database for download for registered users.
-Please download the file and put it into the `/opt/intelmq/var/lib/intelmq/bots/maxmind_geoip/` directory.
+Please download the file and put it into the `/opt/intelmq/var/lib/bots/maxmind_geoip/` directory.
 
 Now add a geolocation lookup bot to your pipeline replacing the `cymru-whois-expert`.
 (Re-)Start any collector containing IP addresses (e.g. the DynDNS feed) and start all needed bots to see the data in the file.
@@ -464,14 +464,14 @@ Now add a geolocation lookup bot to your pipeline replacing the `cymru-whois-exp
 
 #### Answer
 The bot is the "MaxMind GeoIP Expert". The only necessary parameter is the path to your downloaded database:
-* `database`: `/opt/intelmq/var/lib/intelmq/bots/maxmind_geoip/GeoLite2-City.mmdb`
+* `database`: `/opt/intelmq/var/lib/bots/maxmind_geoip/GeoLite2-City.mmdb`
 
 ![Screenshot of the pipeline setup](images/lesson-2-geoip.png)
 
 If you added the new bot manually in the configuration files, reload the gethostbyname experts so they pick up the new destination bot/queue.
 
 * `intelmqctl start maxmind-geoip-expert` (depending on which ID you gave your new bot)
-* `tail /var/lib/intelmq/bots/file-output/events.txt`
+* `tail /var/lib/bots/file-output/events.txt`
 ```json
 ...
 {"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-29T16:32:28+00:00", "time.source": "2020-06-29T07:27:39+00:00", "classification.type": "compromised", "destination.fqdn": "zahasky.greatserviceforless.com", "destination.url": "http://zahasky.greatserviceforless.com/bbc/bbc/s", "source.fqdn": "stillcatholic.com", "event_description.text": "host has been compromised and has malicious code infecting users", "raw": "LyB6YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tIGh0dHA6Ly96YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tL2JiYy9iYmMvcyBzdGlsbGNhdGhvbGljLmNvbQ==", "classification.taxonomy": "intrusions", "source.ip": "74.208.236.193", "source.geolocation.cc": "US", "source.geolocation.latitude": 37.751, "source.geolocation.longitude": -97.822}
@@ -481,7 +481,7 @@ As you can see, the data contains several `source.geolocation.*` fields includin
 
 ## Experts: add IP 2 ASN enrichment
 
-The file `/opt/intelmq/var/lib/intelmq/bots/asn_lookup/ipasn.dat` contains data downloaded and converted by pyasn's utilities.
+The file `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat` contains data downloaded and converted by pyasn's utilities.
 
 ### Task
 
@@ -492,12 +492,12 @@ Add an ASN lookup bot to your pipeline between your configured Geolocation Exper
 
 #### Answer
 The bot is the "ASN Lookup" expert. Parameters:
-* `database`: `/opt/intelmq/var/lib/intelmq/bots/asn_lookup/ipasn.dat`
+* `database`: `/opt/intelmq/var/lib/bots/asn_lookup/ipasn.dat`
 * Screenshot:
   ![Screenshot of the pipeline setup](images/lesson-2-asnlookup.png)
 * Start it: `intelmqctl start asn-lookup-expert` and reload the bot before: `intelmqctl reload maxmind-geoip-expert`.
 * Restart the collector: `intelmqctl restart dyndns-infected-domains-collector`.
-* Check the output file: `tail /opt/intelmq/var/lib/intelmq/bots/file-output/events.txt`:
+* Check the output file: `tail /opt/intelmq/var/lib/bots/file-output/events.txt`:
 ```json
 ...
 {"feed.accuracy": 100.0, "feed.name": "Infected Domains", "feed.provider": "DynDNS", "feed.url": "http://security-research.dyndns.org/pub/malware-feeds/ponmocup-infected-domains-CIF-latest.txt", "time.observation": "2020-06-30T07:45:35+00:00", "time.source": "2020-06-30T07:29:02+00:00", "classification.type": "compromised", "destination.fqdn": "zahasky.greatserviceforless.com", "destination.url": "http://zahasky.greatserviceforless.com/__utm.gif", "source.fqdn": "stillcatholic.com", "event_description.text": "host has been compromised and has malicious code infecting users", "raw": "LyB6YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tIGh0dHA6Ly96YWhhc2t5LmdyZWF0c2VydmljZWZvcmxlc3MuY29tL19fdXRtLmdpZiBzdGlsbGNhdGhvbGljLmNvbQ==", "classification.taxonomy": "intrusions", "source.ip": "74.208.236.193", "source.geolocation.cc": "US", "source.geolocation.latitude": 37.751, "source.geolocation.longitude": -97.822, "source.asn": 8560, "source.network": "74.208.0.0/16"}
