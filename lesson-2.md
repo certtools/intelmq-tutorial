@@ -82,7 +82,7 @@ Directory layout:
 * `/opt/intelmq/etc/intelmq/`: The configuration files.
 * `/opt/intelmq/var/lib/intelmq/`: Data of IntelMQ and it's bots:
 * `/opt/intelmq/var/lib/intelmq/bots/`: For example configuration files of certain bots, local lookup data and output files.
-* `/opt/intelmq/var/log/intelmq/`: The log files and dumped data.
+* `/opt/intelmq/var/log/`: The log files and dumped data.
 * `/opt/intelmq/var/run/intelmq/`: The internal PID-files.
 
 
@@ -93,10 +93,10 @@ Where can I find the log files?
 <details>
   <summary>Click to see the answer.</summary>
 
-You can find all log files in `/opt/intelmq/var/log/intelmq/`. Initially, it should look something like this (because we did not start anything yet):
+You can find all log files in `/opt/intelmq/var/log/`. Initially, it should look something like this (because we did not start anything yet):
 
 ```bash
-intelmq@malaga:~$ ls -al /opt/intelmq/var/log/intelmq/
+intelmq@malaga:~$ ls -al /opt/intelmq/var/log/
 total 8
 drwxr-xr-x 2 intelmq intelmq 4096 Jan 30 07:07 .
 drwxr-xr-x 5 intelmq intelmq 4096 Jan 23 17:09 ..
@@ -157,7 +157,7 @@ The bot-id for the  `spamhaus-drop-collector` is... you might have guess it...  
 
 * Here is how you start it: `intelmqctl start spamhaus-drop-collector`
 * Here is how you look at its logs:
-  * `intelmqctl log spamhaus-drop-collector` or (even simpler) `tail /opt/intelmq/var/log/intelmq/spamhaus-drop-collector.log`  should show you the log file:
+  * `intelmqctl log spamhaus-drop-collector` or (even simpler) `tail /opt/intelmq/var/log/spamhaus-drop-collector.log`  should show you the log file:
 ```
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - HTTPCollectorBot initialized with id spamhaus-drop-collector and intelmq 2.1.1 and python 3.7.3 (default, Apr  3 2019, 05:39:12) as process 6950.
 2020-01-24T11:15:39.023000 - spamhaus-drop-collector - INFO - Bot is starting.
