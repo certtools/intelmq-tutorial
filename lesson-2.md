@@ -52,7 +52,7 @@ Before starting with the tutorial, apply some updates to the VM:
 
 ```bash
 > tutorial-update.sh
-> ./intelmq-tutorial/update-vm.sh
+> /home/user/intelmq/intelmq-tutorial/update-vm.sh
 ```
 
 ### Working on the shell
@@ -79,11 +79,11 @@ In our case, a production installation has been chosen as installation method (i
 
 Directory layout:
 
-* `/etc/intelmq/`: The configuration files.
-* `/var/lib/intelmq/`: Data of IntelMQ and it's bots:
-* `/var/lib/intelmq/bots/`: For example configuration files of certain bots, local lookup data and output files.
-* `/var/log/intelmq/`: The log files and dumped data.
-* `/var/run/intelmq/`: The internal PID-files.
+* `/opt/intelmq/etc/intelmq/`: The configuration files.
+* `/opt/intelmq/var/lib/intelmq/`: Data of IntelMQ and it's bots:
+* `/opt/intelmq/var/lib/intelmq/bots/`: For example configuration files of certain bots, local lookup data and output files.
+* `/opt/intelmq/var/log/intelmq/`: The log files and dumped data.
+* `/opt/intelmq/var/run/intelmq/`: The internal PID-files.
 
 
 #### Task: Log file location
@@ -96,7 +96,7 @@ Where can I find the log files?
 You can find all log files in `/var/log/intelmq/`. Initially, it should look something like this (because we did not start anything yet):
 
 ```bash
-intelmq@malaga:~$ ls -al /var/log/intelmq/
+intelmq@malaga:~$ ls -al /opt/intelmq/var/log/intelmq/
 total 8
 drwxr-xr-x 2 intelmq intelmq 4096 Jan 30 07:07 .
 drwxr-xr-x 5 intelmq intelmq 4096 Jan 23 17:09 ..
@@ -142,7 +142,7 @@ In our case, the config consists of:
 
 * 3 collectors and their respective parsers with public feeds.
 * Some experts providing de-duplication and basic lookups, including a round-robin "load-balanced" bot.
-* A file output bot writing to `/var/lib/bots/file-output/events.txt`.
+* A file output bot writing to `/opt/intelmq/var/lib/bots/file-output/events.txt`.
 
 In the beginning of the tutorial we will work with this configuration, afterwards we will set up our own workflows and add new bots and connections (pipelines).
 
